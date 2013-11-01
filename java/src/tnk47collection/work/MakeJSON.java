@@ -71,7 +71,10 @@ public class MakeJSON implements Runnable {
 				}
 			}
 			
-			FileUtils.writeLines(new File(OUTPUT), mapping.values());
+			JSONArray outputList = new JSONArray();
+			outputList.addAll( mapping.values());
+			
+			FileUtils.write(new File(OUTPUT), "var cards = " + outputList.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
