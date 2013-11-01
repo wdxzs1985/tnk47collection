@@ -23,3 +23,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 	width: 120px;
 	height: 160px;
 }
+
+#list li.media {
+	min-height: 160px;
+	border-bottom: 1px solid #eeeeee;
+}
