@@ -25,8 +25,8 @@
     </select>
 </div>
 <div class="form-group">
-    <label class="sr-only" for="rare">rare</label>
-    <select class="form-control " id="rare">
+    <label class="sr-only" for="rarilites">rarilites</label>
+    <select class="form-control " id="rarilites">
     </select>
 </div>
 <div class="form-group">
@@ -39,7 +39,7 @@
 <script type="text/javascript" src="bootstrap-3.0.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="tmpl/tmpl.min.js"></script>
 <script type="text/javascript" src="lightbox/js/lightbox-2.6.min.js"></script>
-<script type="text/javascript" src="card.js"></script>
+<script type="text/javascript" src="card.json"></script>
 <script type="text/javascript">
 $(function(){
     var filterdata = {};
@@ -72,21 +72,21 @@ $(function(){
         if(filterdata.type == null) {
             filterdata.type = '';
         }
-        filterdata.rare = $('#rare').val();
-        if(filterdata.rare == null) {
-            filterdata.rare = '';
+        filterdata.rarilites = $('#rarilites').val();
+        if(filterdata.rarilites == null) {
+            filterdata.rarilites = '';
         }
         
         render = filter(render, 'region', filterdata.region);
         render = filter(render, 'pref', filterdata.pref);
         render = filter(render, 'type', filterdata.type);
-        render = filter(render, 'rare', filterdata.rare);
+        render = filter(render, 'rarilites', filterdata.rarilites);
 
         var region = [];
         var pref = [];
         var type = [];
         var level = [];
-        var rare = [];
+        var rarilites = [];
         $.each(render, function(index, element){
             if(region.indexOf(element.region) == -1){
             	region.push(element.region);
@@ -97,20 +97,20 @@ $(function(){
             if(type.indexOf(element.type) == -1){
             	type.push(element.type);
             }
-            if(rare.indexOf(element.rare) == -1){
-            	rare.push(element.rare);
+            if(rarilites.indexOf(element.rarilites) == -1){
+            	rarilites.push(element.rarilites);
             }
         });
         
         $('#region').empty().append(tmpl('tmpl-option', {render: region})).val(filterdata.region);
         $('#pref').empty().append(tmpl('tmpl-option', {render: pref})).val(filterdata.pref);
         $('#type').empty().append(tmpl('tmpl-option', {render: type})).val(filterdata.type);
-        $('#rare').empty().append(tmpl('tmpl-option', {render: rare})).val(filterdata.rare);
+        $('#rarilites').empty().append(tmpl('tmpl-option', {render: rarilites})).val(filterdata.rarilites);
         
         if(filterdata.region == '' &&
         		filterdata.pref == '' &&
         		filterdata.type == '' &&
-                filterdata.rare == ''){
+                filterdata.rarilites == ''){
         	return;
         }
         
@@ -141,9 +141,9 @@ $(function(){
 {% for (var i=0; i<o.render.length; i++) { %}
 <li class="media">
     <div class="pull-right">
-        {% for (var j=1; j<=o.render[i].level; j++) { %}
-        <a class="pull-left" href="http://stat100.ameba.jp/tnk47/ratio20/illustrations/card/ill_{%=o.render[i].img%}0{%=j%}.jpg" data-lightbox="{%=o.render[i].img%}" title="{%=o.render[i].name%}">
-            <img class="media-object" src="http://stat100.ameba.jp/tnk47/ratio20/illustrations/card/ill_{%=o.render[i].img%}0{%=j%}.jpg" alt="" style="width:100px;height:100px;">
+        {% for (var j=0; j<o.render[i].ill.length; j++) { %}
+        <a class="pull-left" href="http://stat100.ameba.jp/tnk47/ratio20/illustrations/card/{%=o.render[i].ill[j]%}.jpg" data-lightbox="{%=o.render[i].img%}" title="{%=o.render[i].name%}">
+            <img class="media-object" src="http://stat100.ameba.jp/tnk47/ratio20/illustrations/card/{%=o.render[i].ill[j]%}.jpg" alt="" style="width:80px;height:100px;">
         </a>
         {% } %}
     </div>
@@ -152,7 +152,7 @@ $(function(){
         <p>
             <strong>所属:</strong>{%=o.render[i].region%}/{%=o.render[i].pref%}<br>
             <strong>タイプ:</strong>{%=o.render[i].type%}<br>
-            <strong>レア度:</strong>{%=o.render[i].rare%}<br>
+            <strong>レア度:</strong>{%=o.render[i].rarilites%}<br>
         </p>
     </div>
 </li>
