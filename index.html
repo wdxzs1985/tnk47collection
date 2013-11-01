@@ -142,9 +142,11 @@ $(function(){
 <li class="media">
     <div class="pull-right">
         {% for (var j=0; j<o.render[i].ill.length; j++) { %}
-        <a class="pull-left" href="http://stat100.ameba.jp/tnk47/ratio20/illustrations/card/{%=o.render[i].ill[j]%}.jpg" data-lightbox="{%=o.render[i].img%}" title="{%=o.render[i].name%}">
+        {% if (o.render[i].ill[j] != '') { %}
+        <a class="pull-left" href="http://stat100.ameba.jp/tnk47/ratio20/illustrations/card/{%=o.render[i].ill[j]%}.jpg" data-lightbox="{%=o.render[i].ill[j]%}" title="{%=o.render[i].name%}">
             <img class="media-object" src="http://stat100.ameba.jp/tnk47/ratio10/illustrations/card/thumb/{%=o.render[i].ill[j]%}_thumbCard.jpg" alt="" style="width:80px;height:100px;">
         </a>
+        {% } %}
         {% } %}
     </div>
     <div class="media-body">
