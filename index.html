@@ -1,82 +1,154 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Tnk47collection by wdxzs1985</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/main.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="resources/bootstrap-3.0.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="resources/lightbox/css/lightbox.css" rel="stylesheet">
+<link href="resources/main/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+<form id="filter-form" class="form-inline" role="form">
+<div class="form-group">
+    <label class="sr-only" for="region">region</label>
+    <select class="form-control " id="region">
+    </select>
+</div>
+<div class="form-group">
+    <label class="sr-only" for="pref">pref</label>
+    <select class="form-control " id="pref">
+    </select>
+</div>
+<div class="form-group">
+    <label class="sr-only" for="type">type</label>
+    <select class="form-control " id="type">
+    </select>
+</div>
+<div class="form-group">
+    <label class="sr-only" for="rare">rare</label>
+    <select class="form-control " id="rare">
+    </select>
+</div>
+</form>
+<ul id="list" class="media-list"></ul>
+</div>
+<script type="text/javascript" src="resources/jquery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="resources/bootstrap-3.0.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="resources/tmpl/tmpl.min.js"></script>
+<script type="text/javascript" src="resources/lightbox/js/lightbox-2.6.min.js"></script>
+<script type="text/javascript" src="card.js"></script>
+<script type="text/javascript">
+$(function(){
+    var filterdata = {};
 
-  </head>
-  <body>
-
-      <header>
-        <h1>Tnk47collection</h1>
-        <p></p>
-      </header>
-
-      <div id="banner">
-        <span id="logo"></span>
-
-        <a href="https://github.com/wdxzs1985/tnk47collection" class="button fork"><strong>View On GitHub</strong></a>
-        <div class="downloads">
-          <span>Downloads:</span>
-          <ul>
-            <li><a href="https://github.com/wdxzs1985/tnk47collection/zipball/master" class="button">ZIP</a></li>
-            <li><a href="https://github.com/wdxzs1985/tnk47collection/tarball/master" class="button">TAR</a></li>
-          </ul>
-        </div>
-      </div><!-- end banner -->
-
-    <div class="wrapper">
-      <nav>
-        <ul></ul>
-      </nav>
-      <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-      <footer>
-        <p>Project maintained by <a href="https://github.com/wdxzs1985">wdxzs1985</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
-      </footer>
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    var filter = function(list, prop, value){
+        if(value == '') {
+            return list.slice();
+        }
+        var filt = [];
+        $.each(list, function(index, element){
+            if(element[prop] == value) {
+                filt.push(element);
+            }
+        });
+        return filt;
+    }
     
-  </body>
+    var refresh = function(render, filterdata){
+        var $list = $('#list').empty();
+
+        filterdata.region = $('#region').val();
+        if(filterdata.region == null) {
+        	filterdata.region = '';
+        }
+        filterdata.pref = $('#pref').val();
+        if(filterdata.pref == null) {
+            filterdata.pref = '';
+        }
+        filterdata.type = $('#type').val();
+        if(filterdata.type == null) {
+            filterdata.type = '';
+        }
+        filterdata.rare = $('#rare').val();
+        if(filterdata.rare == null) {
+            filterdata.rare = '';
+        }
+        
+        render = filter(render, 'region', filterdata.region);
+        render = filter(render, 'pref', filterdata.pref);
+        render = filter(render, 'type', filterdata.type);
+        render = filter(render, 'rare', filterdata.rare);
+
+        var region = [];
+        var pref = [];
+        var type = [];
+        var level = [];
+        var rare = [];
+        $.each(render, function(index, element){
+            if(region.indexOf(element.region) == -1){
+            	region.push(element.region);
+            }
+            if(pref.indexOf(element.pref) == -1){
+            	pref.push(element.pref);
+            }
+            if(type.indexOf(element.type) == -1){
+            	type.push(element.type);
+            }
+            if(rare.indexOf(element.rare) == -1){
+            	rare.push(element.rare);
+            }
+        });
+        
+        $('#region').empty().append(tmpl('tmpl-option', {render: region})).val(filterdata.region);
+        $('#pref').empty().append(tmpl('tmpl-option', {render: pref})).val(filterdata.pref);
+        $('#type').empty().append(tmpl('tmpl-option', {render: type})).val(filterdata.type);
+        $('#rare').empty().append(tmpl('tmpl-option', {render: rare})).val(filterdata.rare);
+        
+        if(filterdata.region == '' &&
+        		filterdata.pref == '' &&
+        		filterdata.type == '' &&
+                filterdata.rare == ''){
+        	return;
+        }
+        
+        var html = tmpl('tmpl-listbody-item', {render: render});
+        $list.append(html);
+    }
+    $('select').on('change', function(){
+        refresh(cards.slice(), filterdata);
+    });
+
+    refresh(cards.slice(), filterdata);
+});
+</script>
+<script type="text/x-tmpl" id="tmpl-option">
+<option value="">------</option>
+{% for (var i=0; i<o.render.length; i++) { %}
+<option value="{%=o.render[i]%}">
+    {%=o.render[i]%}
+</option>
+{% } %}
+</script>
+<script type="text/x-tmpl" id="tmpl-listbody-item">
+{% for (var i=0; i<o.render.length; i++) { %}
+<li class="media">
+    <div class="pull-right">
+        {% for (var j=1; j<=o.render[i].level; j++) { %}
+        <a class="pull-left" href="http://{%=o.render[i].img%}0{%=j%}.jpg" data-lightbox="{%=o.render[i].img%}" title="{%=o.render[i].name%}">
+            <img class="media-object" src="http://{%=o.render[i].img%}0{%=j%}.jpg" alt="" style="width:100px;height:100px;">
+        </a>
+        {% } %}
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading">{%=o.render[i].name%}<small>{%=o.render[i].kana%}</small></h4>
+        <p>
+            <strong>所属:</strong>{%=o.render[i].region%}/{%=o.render[i].pref%}<br>
+            <strong>タイプ:</strong>{%=o.render[i].type%}<br>
+            <strong>レア度:</strong>{%=o.render[i].rare%}<br>
+        </p>
+    </div>
+</li>
+{% } %}
+</script>
+</body>
 </html>
