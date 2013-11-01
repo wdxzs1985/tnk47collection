@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.lang3.StringUtils;
 
 import tnk47collection.common.CommonHttpClient;
@@ -23,6 +25,7 @@ import tnk47collection.common.SystemConstants;
 
 public class MakeJSON implements Runnable {
 
+	public static final String INPUT_DIR = "data/step3";
 	public static final String OUTPUT = "data/step4/card.json";
 
 	@Override
@@ -32,27 +35,28 @@ public class MakeJSON implements Runnable {
 		List<String> mergeLines = new ArrayList<>();
 
 		try {
-			for (int i = 1; i <= 7; i++) {
-				String input = String.format("data/step3/%d.csv", i);
-				List<String> inputLines = FileUtils.readLines(new File(input));
+			Collection<File> inputFiles = FileUtils.listFiles(new File(
+					INPUT_DIR), FileFileFilter.FILE, null);
+			for (File input : inputFiles) {
+				List<String> inputLines = FileUtils.readLines(input);
 				mergeLines.addAll(inputLines);
 			}
-			
+
 			Map<String, JSONObject> mapping = new HashMap<>();
 			for (String line : mergeLines) {
-				String[] prop = StringUtils.splitPreserveAllTokens(line,",");
+				String[] prop = StringUtils.splitPreserveAllTokens(line, ",");
 				String ill = prop[0];
 				String name = prop[1];
 				String kana = prop[2];
 				String region = prop[3];
-				String pref=prop[4];
-				String type=prop[5];
-				String rarilites=prop[7];
-				
+				String pref = prop[4];
+				String type = prop[5];
+				String rarilites = prop[7];
+
 				JSONObject card = null;
-				if(mapping.containsKey(name)){
+				if (mapping.containsKey(name)) {
 					card = mapping.get(name);
-					JSONArray illList =card.getJSONArray("ill");
+					JSONArray illList = card.getJSONArray("ill");
 					illList.add(ill);
 				} else {
 					card = new JSONObject();
@@ -62,19 +66,20 @@ public class MakeJSON implements Runnable {
 					card.put("region", StringUtils.defaultIfBlank(region, "不明"));
 					card.put("pref", StringUtils.defaultIfBlank(pref, "不明"));
 					card.put("type", StringUtils.defaultIfBlank(type, "不明"));
-					
+
 					JSONArray illList = new JSONArray();
 					illList.add(ill);
 					card.put("ill", illList);
-					
+
 					mapping.put(name, card);
 				}
 			}
-			
+
 			JSONArray outputList = new JSONArray();
-			outputList.addAll( mapping.values());
-			
-			FileUtils.write(new File(OUTPUT), "var cards = " + outputList.toString());
+			outputList.addAll(mapping.values());
+
+			FileUtils.write(new File(OUTPUT),
+					"var cards = " + outputList.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
