@@ -2,13 +2,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="resources/bootstrap-3.0.1/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/lightbox/css/lightbox.css" rel="stylesheet">
-<link href="resources/main/css/styles.css" rel="stylesheet">
+<link href="bootstrap-3.0.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="lightbox/css/lightbox.css" rel="stylesheet">
+<link href="main/css/styles.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-<form id="filter-form" class="form-inline" role="form">
+<div id="filter-form" class="form-inline" role="form">
 <div class="form-group">
     <label class="sr-only" for="region">region</label>
     <select class="form-control " id="region">
@@ -29,13 +29,16 @@
     <select class="form-control " id="rare">
     </select>
 </div>
-</form>
+<div class="form-group">
+    <button id="clear">クリア</button>
+</div>
+</div>
 <ul id="list" class="media-list"></ul>
 </div>
-<script type="text/javascript" src="resources/jquery/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="resources/bootstrap-3.0.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="resources/tmpl/tmpl.min.js"></script>
-<script type="text/javascript" src="resources/lightbox/js/lightbox-2.6.min.js"></script>
+<script type="text/javascript" src="jquery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="bootstrap-3.0.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="tmpl/tmpl.min.js"></script>
+<script type="text/javascript" src="lightbox/js/lightbox-2.6.min.js"></script>
 <script type="text/javascript" src="card.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -115,6 +118,11 @@ $(function(){
         $list.append(html);
     }
     $('select').on('change', function(){
+        refresh(cards.slice(), filterdata);
+    });
+    
+    $('#clear').click(function(){
+    	$('select').val('');
         refresh(cards.slice(), filterdata);
     });
 
