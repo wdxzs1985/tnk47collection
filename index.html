@@ -134,6 +134,8 @@ $(function(){
         
         var html = tmpl('tmpl-listbody-item', {render: render});
         $list.append(html);
+        
+        $('.fancybox').fancybox();
     }
     $('select').on('change', function(){
         refresh(cards.slice(), filterdata);
@@ -161,7 +163,7 @@ $(function(){
     <div class="pull-right">
         {% for (var j=0; j<o.render[i].ill.length; j++) { %}
         {% if (o.render[i].ill[j] != '') { %}
-        <a class="pull-left" href="http://stat100.ameba.jp/tnk47/ratio20/illustrations/card/{%=o.render[i].ill[j]%}.jpg" data-lightbox="{%=o.render[i].ill[j]%}" title="{%=o.render[i].name%}">
+        <a class="pull-left fancybox" href="http://stat100.ameba.jp/tnk47/ratio20/illustrations/card/{%=o.render[i].ill[j]%}.jpg" data-fancybox-group="{%=o.render[i].name%}" title="{%=o.render[i].name%}">
             <img class="media-object" src="http://stat100.ameba.jp/tnk47/ratio10/illustrations/card/thumb/{%=o.render[i].ill[j]%}_thumbCard.jpg" alt="">
         </a>
         {% } %}

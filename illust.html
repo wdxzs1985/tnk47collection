@@ -27,15 +27,23 @@
     </div>
 </div>
 <div class="container">
-    <form class="form-inline">
-        <div class="form-group">
-            <input id='url-input' type="text" class="form-control" placeholder="输入图片网址">
-        </div>
-        <div class="form-group">
-            <input id='level-input' type="text" class="form-control" placeholder="" value="3">
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">查看</button>
+    <form class="">
+        <div class="row">
+            <div class="col-xs-10">
+                <div class="form-group">
+                    <input id='url-input' type="text" class="form-control" placeholder="输入图片网址">
+                </div>
+            </div>
+            <div class="col-xs-1">
+                <div class="form-group">
+                    <input id='level-input' type="text" class="form-control" placeholder="" value="3">
+                </div>
+            </div>
+            <div class="col-xs-1">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">查看</button>
+                </div>
+            </div>
         </div>
     </form>
 </div>
@@ -44,6 +52,7 @@
 <script type="text/javascript" src="jquery/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="bootstrap-3.0.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="fancybox/jquery.fancybox.js?v=2.1.4"></script>
+<script type="text/javascript" src="tmpl/tmpl.min.js"></script>
 <script type="text/javascript">
 $(function(){
 	var host = 'http://stat100.ameba.jp/tnk47';
@@ -87,13 +96,13 @@ $(function(){
                var code_2 = replaceLast('' + code2, i);
                var $row = $('<div class="row"></div>')
 	           var cardUrl = host + '/ratio20/illustrations/card/ill_' + code_1 + '_' + name + code_2 + '.jpg'
-	           $row.append('<div class="span6">' +
+	           $row.append('<div class="col-sm-6">' +
 	           '<a href="' + cardUrl + '" class="fancybox thumbnail" data-fancybox-group="gallery">' + 
 	           '<img src="' + cardUrl + '"/>' +
 	           '</a></div>');
 	           
 	           var mainUrl = host + '/ratio20/illustrations/card/mainCard2/ill_' + code_1 + '_' + name + code_2 + '_mainCard.jpg'
-               $row.append('<div class="span6">' +
+               $row.append('<div class="col-sm-6">' +
                '<a href="' + mainUrl + '" class="fancybox thumbnail" data-fancybox-group="gallery">' + 
                '<img src="' + mainUrl + '"/>' +
                '</a></div>');
