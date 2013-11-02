@@ -1,0 +1,122 @@
+<!DOCTYPE html ><html>
+<head>
+<title>天下统一卡面查看</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<link href="/static/bootstrap-2.3.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/static/fancybox/jquery.fancybox.css?v=2.1.4" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+<div class="navbar navbar-static-top navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+              <span class="sr-only">天下统一</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" title="天下统一卡面查看">天下统一卡面查看</a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+           <ul class="nav navbar-nav">
+               <li class="active"><a href="illust.html">天下统一卡面查看</a></li>
+               <li class=""><a href="index.html">天下统一图鉴</a></li>
+           </ul>
+       </div>
+    </div>
+</div>
+<div class="container">
+    <form class="">
+      <fieldset>
+        <legend>天下统一卡面查看</legend>
+        <div class="row">
+           <div class="span10">
+                <input id='url-input' type="text" class="input-block-level" placeholder="输入图片网址">
+           </div>
+           <div class="span1">
+                <input id='level-input' type="text" class="input-block-level" placeholder="" value="3">
+           </div>
+           <div class="span1">
+                <button type="submit" class="btn btn-primary btn-block">查看</button>
+           </div>
+		</div>
+	  </fieldset>
+	</form>
+</div>
+<div id="ill-list" class="container">
+</div>
+<script type="text/javascript" src="/static/jquery/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/fancybox/jquery.fancybox.js?v=2.1.4"></script>
+<script type="text/javascript">
+$(function(){
+	var host = 'http://stat100.ameba.jp/tnk47';
+	
+    var $urlInput = $('#url-input');
+    $urlInput.val(host + '/ratio20/illustrations/card/ill_18841_itazurakabochanomajo01.jpg');
+    $urlInput.popover({
+        trigger: 'hover',
+        placement: 'bottom',
+        title: '请输入卡牌图片网址',
+        content: '图片不论大小'
+    });
+    $urlInput.click(function(){
+        this.select();
+    });
+    
+    var $levelInput = $('#level-input');
+    $levelInput.popover({
+        trigger: 'hover',
+        placement: 'bottom',
+        title: '请输入卡牌进化等级',
+        content: '3进卡输入3，5进卡输入5，以此类推'
+    });
+    
+    var replaceLast = function(str, replacement){
+        var pos = str.length - 1;
+        var prefix = str.substring(0, pos);
+        return prefix + replacement;
+    };
+   
+    $('form').submit(function(){
+        var url = $urlInput.val();
+        
+	    var $illList = $('#ill-list').empty();
+	    
+	    var newUrl = url.replace(/ill_(\d+)_([a-z_]+)(\d+)/, function(ma, code1, name, code2) {
+            var level = Number($levelInput.val());
+            
+	        for(var i=1; i < level + 1; i++ ) {
+	           var code_1 = replaceLast('' + code1, i);
+               var code_2 = replaceLast('' + code2, i);
+               var $row = $('<div class="row"></div>')
+	           var cardUrl = host + '/ratio20/illustrations/card/ill_' + code_1 + '_' + name + code_2 + '.jpg'
+	           $row.append('<div class="span6">' +
+	           '<a href="' + cardUrl + '" class="fancybox thumbnail" data-fancybox-group="gallery">' + 
+	           '<img src="' + cardUrl + '"/>' +
+	           '</a></div>');
+	           
+	           var mainUrl = host + '/ratio20/illustrations/card/mainCard2/ill_' + code_1 + '_' + name + code_2 + '_mainCard.jpg'
+               $row.append('<div class="span6">' +
+               '<a href="' + mainUrl + '" class="fancybox thumbnail" data-fancybox-group="gallery">' + 
+               '<img src="' + mainUrl + '"/>' +
+               '</a></div>');
+               
+               $illList.append('<div class="page-header"><h1>进化' + i + '</h1></div>');
+               $illList.append($row);
+	        }
+	        
+            $('.fancybox').fancybox();
+	        return ma;
+	    });
+        return false;
+    });
+    
+    
+});
+
+</script>
+</body>
+</html>

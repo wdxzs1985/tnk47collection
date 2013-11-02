@@ -3,10 +3,29 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="bootstrap-3.0.1/css/bootstrap.min.css" rel="stylesheet">
-<link href="lightbox/css/lightbox.css" rel="stylesheet">
+<link href="fancybox/jquery.fancybox.css?v=2.1.4" rel="stylesheet" type="text/css" media="screen" />
 <link href="main/css/styles.css" rel="stylesheet">
 </head>
 <body>
+<div class="navbar navbar-static-top navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+              <span class="sr-only">天下统一</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" title="天下统一图鉴">天下统一图鉴</a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+           <ul class="nav navbar-nav">
+               <li class=""><a href="illust.html">天下统一卡面查看</a></li>
+               <li class="active"><a href="index.html">天下统一图鉴</a></li>
+           </ul>
+       </div>
+    </div>
+</div>
 <div class="container">
 <div id="filter-form" class="form-inline" role="form">
 <div class="form-group">
@@ -30,7 +49,7 @@
     </select>
 </div>
 <div class="form-group">
-    <button id="clear">クリア</button>
+    <button id="clear">重置搜索</button>
 </div>
 </div>
 <ul id="list" class="media-list"></ul>
@@ -38,7 +57,7 @@
 <script type="text/javascript" src="jquery/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="bootstrap-3.0.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="tmpl/tmpl.min.js"></script>
-<script type="text/javascript" src="lightbox/js/lightbox-2.6.min.js"></script>
+<script type="text/javascript" src="fancybox/jquery.fancybox.js?v=2.1.4"></script>
 <script type="text/javascript" src="card.json"></script>
 <script type="text/javascript">
 $(function(){
@@ -153,8 +172,8 @@ $(function(){
         <h4 class="media-heading">{%=o.render[i].name%}<small>{%=o.render[i].kana%}</small></h4>
         <p>
             <strong>所属:</strong>{%=o.render[i].region%}/{%=o.render[i].pref%}<br>
-            <strong>タイプ:</strong>{%=o.render[i].type%}<br>
-            <strong>レア度:</strong>{%=o.render[i].rarilites%}<br>
+            <strong>属性:</strong>{%=o.render[i].type%}<br>
+            <strong>稀有度:</strong>{%=o.render[i].rarilites%}<br>
         </p>
     </div>
 </li>
