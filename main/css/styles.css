@@ -1,18 +1,14 @@
 @charset "UTF-8";
 
 body {
-    background: #ffffff;
-    font-family:'Lucida Grande',
-                'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3',
-                Meiryo, メイリオ, sans-serif;
+    background: #7A8498;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
     word-wrap: break-word;
     word-break: break-all;
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family:'Lucida Grande',
-                'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3',
-                Meiryo, メイリオ, sans-serif;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
 }
 
 #filter-form {
