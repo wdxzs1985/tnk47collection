@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="bootstrap-3.0.1/css/bootstrap.min.css" rel="stylesheet">
 <link href="fancybox/jquery.fancybox.css?v=2.1.4" rel="stylesheet" type="text/css" media="screen" />
-<link href="FancySelect/fancySelect.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="selectize.js-0.8.2/css/selectize.bootstrap3.css" rel="stylesheet" type="text/css" media="screen" />
 <link href="main/css/styles.css" rel="stylesheet">
 </head>
 <body>
@@ -29,22 +29,27 @@
 <div class="container">
 <div id="filter-form" class="form-inline" role="form">
 <div class="form-group">
-    <label class="sr-only" for="region">region</label>
+    <label class="sr-only" for="name">name</label>
+    <select class="form-control " id="name">
+    </select>
+</div>
+<div class="form-group">
+    <label class="sr-only" for="region">所属</label>
     <select class="form-control " id="region">
     </select>
 </div>
 <div class="form-group">
-    <label class="sr-only" for="pref">pref</label>
+    <label class="sr-only" for="pref">県</label>
     <select class="form-control " id="pref">
     </select>
 </div>
 <div class="form-group">
-    <label class="sr-only" for="type">type</label>
+    <label class="sr-only" for="type">属性</label>
     <select class="form-control " id="type">
     </select>
 </div>
 <div class="form-group">
-    <label class="sr-only" for="rarilites">rarilites</label>
+    <label class="sr-only" for="rarilites">稀有度</label>
     <select class="form-control " id="rarilites">
     </select>
 </div>
@@ -57,7 +62,7 @@
 <script type="text/javascript" src="jquery/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="bootstrap-3.0.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="fancybox/jquery.fancybox.js?v=2.1.4"></script>
-<script type="text/javascript" src="FancySelect/fancySelect.js"></script>
+<script type="text/javascript" src="selectize.js-0.8.2/js/standalone/selectize.min.js"></script>
 <script type="text/javascript" src="tmpl/tmpl.min.js"></script>
 <script type="text/javascript" src="card.json"></script>
 <script type="text/javascript">
@@ -80,6 +85,11 @@ $(function(){
     var refresh = function(render, filterdata){
         var $list = $('#list').empty();
 
+        filterdata.name = $('#name').val();
+        if(filterdata.name == null) {
+            filterdata.name = '';
+        }
+
         filterdata.region = $('#region').val();
         if(filterdata.region == null) {
         	filterdata.region = '';
@@ -96,18 +106,23 @@ $(function(){
         if(filterdata.rarilites == null) {
             filterdata.rarilites = '';
         }
-        
+
+        render = filter(render, 'name', filterdata.name);
         render = filter(render, 'region', filterdata.region);
         render = filter(render, 'pref', filterdata.pref);
         render = filter(render, 'type', filterdata.type);
         render = filter(render, 'rarilites', filterdata.rarilites);
 
+        var name = [];
         var region = [];
         var pref = [];
         var type = [];
         var level = [];
         var rarilites = [];
         $.each(render, function(index, element){
+            if(region.indexOf(element.name) == -1){
+                name.push(element.name);
+            }
             if(region.indexOf(element.region) == -1){
             	region.push(element.region);
             }
@@ -121,36 +136,38 @@ $(function(){
             	rarilites.push(element.rarilites);
             }
         });
+
+        var $name = $('#name');
+        $name.empty();
+        $name.append(tmpl('tmpl-option', {render: name}));
+        $name.val(filterdata.name);
+        $name.selectize();
         
         var $region = $('#region');
         $region.empty();
-        $region.fancySelect();
         $region.append(tmpl('tmpl-option', {render: region}));
         $region.val(filterdata.region);
-        $region.trigger('update');
+        $region.selectize();
 
         var $pref = $('#pref');
         $pref.empty();
-        $pref.fancySelect();
         $pref.append(tmpl('tmpl-option', {render: pref}));
         $pref.val(filterdata.pref);
-        $pref.trigger('update');
+        $pref.selectize();
 
         var $type = $('#type');
         $type.empty();
-        $type.fancySelect();
         $type.append(tmpl('tmpl-option', {render: type}));
         $type.val(filterdata.type);
-        $type.trigger('update');
+        $type.selectize();
 
         var $rarilites = $('#rarilites');
         $rarilites.empty();
-        $rarilites.fancySelect();
         $rarilites.append(tmpl('tmpl-option', {render: rarilites}));
         $rarilites.val(filterdata.rarilites);
-        $rarilites.trigger('update');
+        $rarilites.selectize();
         
-        if(filterdata.region == '' &&
+        if(filterdata.name == '' && filterdata.region == '' &&
         		filterdata.pref == '' &&
         		filterdata.type == '' &&
                 filterdata.rarilites == ''){
@@ -162,7 +179,8 @@ $(function(){
         
         $('.fancybox').fancybox();
     }
-    $('select').on('change', function(){
+    
+    $('.form-control').on('change', function(){
         refresh(cards.slice(), filterdata);
     });
     
