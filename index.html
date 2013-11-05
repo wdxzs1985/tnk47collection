@@ -107,11 +107,14 @@ $(function(){
             filterdata.rarilites = '';
         }
 
-        render = filter(render, 'name', filterdata.name);
-        render = filter(render, 'region', filterdata.region);
-        render = filter(render, 'pref', filterdata.pref);
-        render = filter(render, 'type', filterdata.type);
-        render = filter(render, 'rarilites', filterdata.rarilites);
+        if (filterdata.name != '') {
+            render = filter(render, 'name', filterdata.name);
+        } else {
+            render = filter(render, 'region', filterdata.region);
+            render = filter(render, 'pref', filterdata.pref);
+            render = filter(render, 'type', filterdata.type);
+            render = filter(render, 'rarilites', filterdata.rarilites);
+        }
 
         var name = [];
         var region = [];
@@ -141,31 +144,26 @@ $(function(){
         $name.empty();
         $name.append(tmpl('tmpl-option', {render: name}));
         $name.val(filterdata.name);
-        $name.selectize();
         
         var $region = $('#region');
         $region.empty();
         $region.append(tmpl('tmpl-option', {render: region}));
         $region.val(filterdata.region);
-        $region.selectize();
 
         var $pref = $('#pref');
         $pref.empty();
         $pref.append(tmpl('tmpl-option', {render: pref}));
         $pref.val(filterdata.pref);
-        $pref.selectize();
 
         var $type = $('#type');
         $type.empty();
         $type.append(tmpl('tmpl-option', {render: type}));
         $type.val(filterdata.type);
-        $type.selectize();
 
         var $rarilites = $('#rarilites');
         $rarilites.empty();
         $rarilites.append(tmpl('tmpl-option', {render: rarilites}));
         $rarilites.val(filterdata.rarilites);
-        $rarilites.selectize();
         
         if(filterdata.name == '' && filterdata.region == '' &&
         		filterdata.pref == '' &&
