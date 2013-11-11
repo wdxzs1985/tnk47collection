@@ -102,12 +102,12 @@ $(function(){
         var $list = $('#list').empty();
         
         var cardData = [];
-        cardData[0] = randomList(filter(render, 'rarilites', 'SSレア'));
-        cardData[1] = randomList(filter(render, 'rarilites', 'Sレア'));
-        cardData[2] = randomList(filter(render, 'rarilites', 'ハイレア'));
-        cardData[3] = randomList(filter(render, 'rarilites', 'レア'));
-        cardData[4] = randomList(filter(render, 'rarilites', 'ハイノーマル'));
-        cardData[5] = randomList(filter(render, 'rarilites', 'ノーマル'));
+        cardData[0] = randomList(filter(render, 'rarilites', 'SSR'));
+        cardData[1] = randomList(filter(render, 'rarilites', 'SR'));
+        cardData[2] = randomList(filter(render, 'rarilites', 'HR'));
+        cardData[3] = randomList(filter(render, 'rarilites', 'R'));
+        cardData[4] = randomList(filter(render, 'rarilites', 'HN'));
+        cardData[5] = randomList(filter(render, 'rarilites', 'N'));
 
         var gachaList = [];
         $('.input-quantity').each(function(index, element){
@@ -135,14 +135,6 @@ $(function(){
         refresh(cards.slice(), times);
     });
 });
-</script>
-<script type="text/x-tmpl" id="tmpl-option">
-<option value="">------</option>
-{% for (var i=0; i<o.render.length; i++) { %}
-<option value="{%=o.render[i]%}">
-    {%=o.render[i]%}
-</option>
-{% } %}
 </script>
 <script type="text/x-tmpl" id="tmpl-listbody-item">
 {% for (var i=0; i<o.render.length; i++) { %}
