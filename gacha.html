@@ -115,19 +115,19 @@ $(function(){
         cardData[4] = randomList(filter(render, 'rarilites', 'HN'));
         cardData[5] = randomList(filter(render, 'rarilites', 'N'));
 
-        var gachaList = [];
+        var cardPool = [];
         $('.input-quantity').each(function(index, element){
         	var quantity = $(element).val();
-        	var list = cardData[index];
         	for(var i = 0; i < quantity; i++) {
-        		gachaList.push(list.pop());
+                var list = randomList(cardData[index]);
+                cardPool.push(list.pop());
         	}
         });
 
         var cardList = [];
         for(var i=0; i< times; i++) {
-        	gachaList = randomList(gachaList);
-        	cardList.push(gachaList.pop());
+        	cardPool = randomList(cardPool);
+        	cardList.push(cardPool.pop());
         }
         
         var html = tmpl('tmpl-listbody-item', {render: cardList});
