@@ -50,6 +50,7 @@ public class MakeJSON implements Runnable {
 				rarilites = StringUtils.replace(rarilites, "レア", "R");
 				rarilites = StringUtils.replace(rarilites, "ハイノーマル", "HN");
 				rarilites = StringUtils.replace(rarilites, "ノーマル", "N");
+				rarilites = StringUtils.replace(rarilites, "スペシャル", "SP");
 
 				JSONObject card = null;
 				if (mapping.containsKey(name)) {
