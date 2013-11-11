@@ -1,17 +1,11 @@
 package tnk47collection.work;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.text.html.HTMLDocument.HTMLReader.TagAction;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -19,9 +13,6 @@ import net.sf.json.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.lang3.StringUtils;
-
-import tnk47collection.common.CommonHttpClient;
-import tnk47collection.common.SystemConstants;
 
 public class MakeJSON implements Runnable {
 
@@ -51,7 +42,14 @@ public class MakeJSON implements Runnable {
 				String region = prop[3];
 				String pref = prop[4];
 				String type = prop[5];
+
 				String rarilites = prop[7];
+				rarilites = StringUtils.replace(rarilites, "SSレア", "SSR");
+				rarilites = StringUtils.replace(rarilites, "Sレア", "SR");
+				rarilites = StringUtils.replace(rarilites, "ハイレア", "HR");
+				rarilites = StringUtils.replace(rarilites, "レア", "R");
+				rarilites = StringUtils.replace(rarilites, "ハイノーマル", "HN");
+				rarilites = StringUtils.replace(rarilites, "ノーマル", "N");
 
 				JSONObject card = null;
 				if (mapping.containsKey(name)) {
