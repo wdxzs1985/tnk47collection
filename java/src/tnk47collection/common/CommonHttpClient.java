@@ -2,14 +2,12 @@ package tnk47collection.common;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.CookieManager;
+import java.io.InputStream;
 import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -23,7 +21,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -38,11 +35,12 @@ import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.impl.cookie.BasicClientCookie2;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 
 public class CommonHttpClient {
+
+	private static final String USER_AGENT = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25";
 
 	private final Log log = LogFactory.getLog(CommonHttpClient.class);
 	private final HttpClient client;
@@ -64,8 +62,7 @@ public class CommonHttpClient {
 		clientBuilder.setConnectionManager(connManager);
 		clientBuilder.setDefaultCookieStore(this.cookieStore);
 		clientBuilder.setDefaultRequestConfig(defaultRequestConfig);
-		clientBuilder
-				.setUserAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25");
+		clientBuilder.setUserAgent(USER_AGENT);
 		clientBuilder
 				.setKeepAliveStrategy(DefaultConnectionKeepAliveStrategy.INSTANCE);
 		final Collection<Header> defaultHeaders = new LinkedList<Header>();
@@ -74,8 +71,7 @@ public class CommonHttpClient {
 						"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"));
 		defaultHeaders.add(new BasicHeader("Accept-Charset", "UTF-8;"));
 		defaultHeaders.add(new BasicHeader("Accept-Encoding", "gzip, deflate"));
-		defaultHeaders.add(new BasicHeader("Accept-Language",
-				"zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3"));
+		defaultHeaders.add(new BasicHeader("Accept-Language", "ja"));
 		defaultHeaders.add(new BasicHeader("Cache-Control", "no-cache"));
 		defaultHeaders.add(new BasicHeader("Connection", "keep-alive"));
 		defaultHeaders.add(new BasicHeader("Pragma", "no-cache"));
@@ -223,22 +219,27 @@ public class CommonHttpClient {
 	}
 
 	public void loadCookie(File localFile) {
-		String cookieData = null;
+		InputStream ins = null;
 		try {
-			cookieData = FileUtils.readFileToString(localFile);
+			ins = FileUtils.openInputStream(localFile);
+			Properties prop = new Properties();
+			prop.load(ins);
+
+			for (Entry<Object, Object> entry : prop.entrySet()) {
+				String key = (String) entry.getKey();
+				String value = (String) entry.getValue();
+				Cookie cookie = new BasicClientCookie(key, value);
+				this.cookieStore.addCookie(cookie);
+			}
 		} catch (IOException e) {
-			log.error("load cookie failed.", e);
-		}
-		if (StringUtils.isBlank(cookieData)) {
-			log.info("no cookie to load.");
-			return;
+			this.log.info("no cookie to load.");
 		}
 	}
 
 	public void saveCookie(File localFile) {
 		List<Cookie> cookieList = this.cookieStore.getCookies();
 		if (CollectionUtils.isEmpty(cookieList)) {
-			log.info("no cookie to save.");
+			this.log.info("no cookie to save.");
 			return;
 		}
 		for (Cookie cookie : cookieList) {
