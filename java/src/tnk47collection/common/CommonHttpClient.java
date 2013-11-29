@@ -2,12 +2,10 @@ package tnk47collection.common;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -219,16 +217,28 @@ public class CommonHttpClient {
 	}
 
 	public void loadCookie(File localFile) {
-		InputStream ins = null;
 		try {
-			ins = FileUtils.openInputStream(localFile);
-			Properties prop = new Properties();
-			prop.load(ins);
+			List<String> lines = FileUtils.readLines(localFile, "utf-8");
+			for (String line : lines) {
+				String[] cookieValue = StringUtils.split(line, ";");
+				String[] nameValue = StringUtils.split(cookieValue[0], "=");
+				String name = nameValue[0];
+				String value = nameValue[1];
+				String domain = StringUtils.split(cookieValue[1], "=")[1];
+				String path = StringUtils.split(cookieValue[2], "=")[1];
+				long expires = Long.valueOf(StringUtils.split(cookieValue[3],
+						"=")[1]);
+				int version = Integer.valueOf(StringUtils.split(cookieValue[4],
+						"=")[1]);
+				boolean secure = Boolean.valueOf(StringUtils.split(
+						cookieValue[5], "=")[1]);
 
-			for (Entry<Object, Object> entry : prop.entrySet()) {
-				String key = (String) entry.getKey();
-				String value = (String) entry.getValue();
-				Cookie cookie = new BasicClientCookie(key, value);
+				BasicClientCookie cookie = new BasicClientCookie(name, value);
+				cookie.setDomain(domain);
+				cookie.setPath(path);
+				cookie.setExpiryDate(new Date(expires));
+				cookie.setVersion(version);
+				cookie.setSecure(secure);
 				this.cookieStore.addCookie(cookie);
 			}
 		} catch (IOException e) {
@@ -242,8 +252,36 @@ public class CommonHttpClient {
 			this.log.info("no cookie to save.");
 			return;
 		}
+		List<String> lines = new LinkedList<String>();
 		for (Cookie cookie : cookieList) {
-			System.out.println(cookie.toString());
+			String line = this.cookieToString(cookie);
+			if (StringUtils.isNotBlank(line)) {
+				lines.add(line);
+			}
 		}
+		if (CollectionUtils.isNotEmpty(lines)) {
+			try {
+				FileUtils.writeLines(localFile, "utf-8", lines);
+			} catch (IOException e) {
+				this.log.error("write cookie failed.", e);
+			}
+		}
+	}
+
+	private String cookieToString(Cookie cookie) {
+		if (cookie.getExpiryDate() == null) {
+			return null;
+		}
+
+		String name = cookie.getName();
+		String value = cookie.getValue();
+		String domain = cookie.getDomain();
+		String path = cookie.getPath();
+		long expires = cookie.getExpiryDate().getTime();
+		int version = cookie.getVersion();
+		boolean secure = cookie.isSecure();
+		return String.format(
+				"%s=%s; Domain=%s; Path=%s; Expires=%d; Version=%d; Secure=%s",
+				name, value, domain, path, expires, version, secure);
 	}
 }
