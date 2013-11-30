@@ -11,8 +11,8 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.TagAction;
 
 import org.apache.commons.io.FileUtils;
 
-import tnk47collection.common.CommonHttpClient;
-import tnk47collection.common.SystemConstants;
+import common.CommonHttpClient;
+import common.SystemConstants;
 
 public class MakeRawText implements Runnable {
 

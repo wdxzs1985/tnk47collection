@@ -1,4 +1,4 @@
-package tnk47collection.common;
+package common;
 
 import java.util.TimeZone;
 
