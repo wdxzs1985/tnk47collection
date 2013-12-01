@@ -69,6 +69,7 @@ public class PrefectureBattleListHandler extends AbstractEventHandler<Robot> {
         for (int i = 0; i < outlines.size(); i++) {
             final JSONObject battle = outlines.getJSONObject(i);
             if (battle.getBoolean("isInvite")) {
+                this.robot.getSession().setProperty("isInvite", "true");
                 return battle;
             }
         }

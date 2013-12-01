@@ -49,9 +49,11 @@ public class BattleCheckHandler extends AbstractEventHandler<Robot> {
         if (pageParamsMatcher.find()) {
             final String pageParams = pageParamsMatcher.group(1);
             final JSONObject jsonPageParams = JSONObject.fromObject(pageParams);
-            final int maxPower = jsonPageParams.getInt("maxPower");
+            jsonPageParams.getInt("maxPower");
             final int curPower = jsonPageParams.getInt("curPower");
-            if (curPower >= maxPower / 5) {
+            final JSONObject selectedDeckData = jsonPageParams.getJSONObject("selectedDeckData");
+            final int spendAttackPower = selectedDeckData.getInt("spendAttackPower");
+            if (curPower >= spendAttackPower || spendAttackPower == 0) {
                 final String deckId = jsonPageParams.getString("selectedDeckId");
                 session.setProperty("deckId", deckId);
                 session.setProperty("attackType", "1");
