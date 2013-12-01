@@ -24,14 +24,14 @@ public abstract class AbstractRobot implements Robot, Runnable {
     private final Map<String, EventHandler> handlerMapping;
     private final Properties session;
 
-    public AbstractRobot(final String host) {
+    public AbstractRobot(final String host, final String setup) {
         this.host = host;
         this.log = LogFactory.getLog(this.getClass());
 
         InputStream inputConfig = null;
         this.session = new Properties();
         try {
-            inputConfig = FileUtils.openInputStream(new File("setup.properties"));
+            inputConfig = FileUtils.openInputStream(new File(setup));
             this.session.load(inputConfig);
         } catch (final IOException e) {
             throw new RuntimeException(e);
@@ -71,6 +71,12 @@ public abstract class AbstractRobot implements Robot, Runnable {
     @Override
     public void dispatch(final String event) {
         this.nextHandler = this.handlerMapping.get(event);
+        if (this.nextHandler == null) {
+            if (this.log.isInfoEnabled()) {
+                this.log.info(String.format("未知方法[%s]，返回主页", event));
+            }
+            this.dispatch("/mypage");
+        }
     }
 
     @Override

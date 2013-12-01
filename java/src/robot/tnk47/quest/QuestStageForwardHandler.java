@@ -84,7 +84,7 @@ public class QuestStageForwardHandler extends AbstractEventHandler<Robot> {
         session.put("maxPower", maxPower);
         session.put("attrPoints", attrPoints);
         session.put("callback", "/quest/stage/forward");
-        this.robot.dispatch("/level-up");
+        this.robot.dispatch("/status-up");
     }
 
     private void onStaminaOut(final JSONObject data) {
@@ -93,33 +93,30 @@ public class QuestStageForwardHandler extends AbstractEventHandler<Robot> {
         final JSONObject userData = data.getJSONObject("userData");
         final int maxStamina = userData.getInt("maxStamina");
         if (data.containsKey("regenStaminaItems")) {
-            final int useStamina50MoreThan = Integer.valueOf(session.getProperty("QuestStageForwardHandler.useStamina50MoreThan",
-                                                                                 "0"));
-            final int useStamina100MoreThan = Integer.valueOf(session.getProperty("QuestStageForwardHandler.useStamina100MoreThan",
-                                                                                  "0"));
-            final int needExpForNextLevel = Integer.valueOf(session.getProperty("QuestStageForwardHandler.needExpForNextLevel",
+            final boolean useStamina50 = Boolean.valueOf(session.getProperty("QuestStageForwardHandler.useStamina50",
+                                                                             "false"));
+            final boolean useStamina100 = Boolean.valueOf(session.getProperty("QuestStageForwardHandler.useStamina100",
+                                                                              "false"));
+            final int needExpForNextLevel = Integer.valueOf(session.getProperty("needExpForNextLevel",
                                                                                 "0"));
             final JSONArray regenStaminaItems = data.getJSONArray("regenStaminaItems");
             for (int i = 0; i < regenStaminaItems.size(); i++) {
                 final JSONObject regenStamina = (JSONObject) regenStaminaItems.get(i);
                 final String code = regenStamina.getString("code");
-                final int count = regenStamina.getInt("count");
                 final String name = regenStamina.getString("name");
                 final String itemId = regenStamina.getString("itemId");
-                if (StringUtils.contains(name, "(当日)")) {
+                if (StringUtils.contains(name, "当日")) {
                     session.put("itemId", itemId);
                     session.put("name", name);
                     useItem = true;
                     break;
-                } else if (StringUtils.contains(code, "stamina50") && count > useStamina50MoreThan
-                           && useStamina50MoreThan > 0
+                } else if (StringUtils.contains(code, "stamina50") && useStamina50
                            && needExpForNextLevel > maxStamina / 2) {
                     session.put("itemId", itemId);
                     session.put("name", name);
                     useItem = true;
                     break;
-                } else if (StringUtils.contains(code, "stamina100") && count > useStamina100MoreThan
-                           && useStamina100MoreThan > 0
+                } else if (StringUtils.contains(code, "stamina100") && useStamina100
                            && needExpForNextLevel > maxStamina) {
                     session.put("itemId", itemId);
                     session.put("name", name);
@@ -135,22 +132,10 @@ public class QuestStageForwardHandler extends AbstractEventHandler<Robot> {
             final boolean regenerate = Boolean.valueOf(session.getProperty("QuestStageForwardHandler.regenerate",
                                                                            "false"));
             if (regenerate) {
-                final int stamina = userData.getInt("stamina");
-                final int regenerateSeconds = userData.getInt("regenerateSeconds");
-                final int waitTimes = regenerateSeconds * (maxStamina - stamina);
                 if (this.log.isInfoEnabled()) {
-                    final int hours = Math.round(waitTimes / 3600);
-                    final int minites = Math.round(waitTimes / 60) % 60;
-                    final int seconds = waitTimes % 60;
-                    this.log.info(String.format("等待回复%d小时%d分%d秒",
-                                                hours,
-                                                minites,
-                                                seconds));
+                    this.log.info("等回血");
                 }
-                try {
-                    Thread.sleep(waitTimes * 1000);
-                } catch (final InterruptedException e) {
-                }
+                this.robot.dispatch("/mypage");
             } else {
                 if (this.log.isInfoEnabled()) {
                     this.log.info("放弃治疗了");

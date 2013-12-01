@@ -1,4 +1,4 @@
-package robot.tnk47;
+package robot.tnk47.marathon;
 
 import java.util.LinkedList;
 import java.util.List;

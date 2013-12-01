@@ -8,7 +8,7 @@ import robot.Robot;
 
 public class HomeHandler extends AbstractEventHandler<Robot> {
 
-    public static final Pattern HTML_TITLE_PATTERN = Pattern.compile("<title>天下統一クロニクル</title>");
+    private static final Pattern HTML_TITLE_PATTERN = Pattern.compile("<title>天下統一クロニクル</title>");
 
     public HomeHandler(final Robot robot) {
         super(robot);
@@ -16,8 +16,7 @@ public class HomeHandler extends AbstractEventHandler<Robot> {
 
     @Override
     public void handleIt() {
-        final String input = this.robot.buildPath("/");
-        final String html = this.robot.getHttpClient().get(input);
+        final String html = this.httpGet("/");
         final Matcher matcher = HomeHandler.HTML_TITLE_PATTERN.matcher(html);
         if (matcher.find()) {
             this.robot.dispatch("/mypage");

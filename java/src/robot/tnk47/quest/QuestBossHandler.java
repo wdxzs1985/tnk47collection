@@ -1,6 +1,5 @@
 package robot.tnk47.quest;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -26,19 +25,19 @@ public class QuestBossHandler extends AbstractEventHandler<Robot> {
         final Properties session = this.robot.getSession();
         final String token = session.getProperty("token");
 
-        final String input = this.robot.buildPath("/quest/boss-animation");
-        final List<BasicNameValuePair> nvps = new LinkedList<BasicNameValuePair>();
+        final String path = "/quest/boss-animation";
+        final List<BasicNameValuePair> nvps = this.createNameValuePairs();
         nvps.add(new BasicNameValuePair("token", token));
-        final String html = this.robot.getHttpClient().post(input, nvps);
-        String bossName = "???";
-        final Matcher bossResultMatcher = QuestBossHandler.BOSS_RESULT_PATTERN.matcher(html);
-        if (bossResultMatcher.find()) {
-            final String jsonString = bossResultMatcher.group(1);
-            final JSONObject bossResult = JSONObject.fromObject(jsonString)
-                                                    .getJSONObject("bossResult");
-            final JSONObject bossInfo = bossResult.getJSONObject("bossInfo");
-            bossName = bossInfo.getString("name");
-            if (this.log.isInfoEnabled()) {
+        final String html = this.httpPost(path, nvps);
+        if (this.log.isInfoEnabled()) {
+            String bossName = "???";
+            final Matcher bossResultMatcher = QuestBossHandler.BOSS_RESULT_PATTERN.matcher(html);
+            if (bossResultMatcher.find()) {
+                final String jsonString = bossResultMatcher.group(1);
+                final JSONObject bossResult = JSONObject.fromObject(jsonString)
+                                                        .getJSONObject("bossResult");
+                final JSONObject bossInfo = bossResult.getJSONObject("bossInfo");
+                bossName = bossInfo.getString("name");
                 this.log.info("击败BOSS: " + bossName);
             }
         }

@@ -1,10 +1,12 @@
-package robot.tnk47;
+package robot.tnk47.marathon;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import robot.AbstractRobot;
 import robot.LoginHandler;
+import robot.tnk47.HomeHandler;
+import robot.tnk47.MypageHandler;
 
 public class MarathonRobot extends AbstractRobot {
 

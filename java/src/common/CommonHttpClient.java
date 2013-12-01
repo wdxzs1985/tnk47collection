@@ -39,10 +39,12 @@ import org.apache.http.util.EntityUtils;
 public class CommonHttpClient {
 
     private static final String USER_AGENT = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25";
+    private static final int TIMEOUT = 20000;
 
     private final Log log = LogFactory.getLog(CommonHttpClient.class);
     private final HttpClient client;
     private final BasicCookieStore cookieStore;
+    private String referer = "";
 
     public CommonHttpClient() {
         final PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager();
@@ -84,9 +86,9 @@ public class CommonHttpClient {
         }
         final HttpGet httpget = new HttpGet(url);
         final RequestConfig defaultRequestConfig = RequestConfig.custom()
-                                                                .setSocketTimeout(5000)
-                                                                .setConnectTimeout(5000)
-                                                                .setConnectionRequestTimeout(5000)
+                                                                .setSocketTimeout(CommonHttpClient.TIMEOUT)
+                                                                .setConnectTimeout(CommonHttpClient.TIMEOUT)
+                                                                .setConnectionRequestTimeout(CommonHttpClient.TIMEOUT)
                                                                 .build();
         httpget.setConfig(defaultRequestConfig);
         this.initHttpHeader(httpget);
@@ -125,9 +127,9 @@ public class CommonHttpClient {
         }
         final HttpPost httppost = new HttpPost(url);
         final RequestConfig defaultRequestConfig = RequestConfig.custom()
-                                                                .setSocketTimeout(5000)
-                                                                .setConnectTimeout(5000)
-                                                                .setConnectionRequestTimeout(5000)
+                                                                .setSocketTimeout(CommonHttpClient.TIMEOUT)
+                                                                .setConnectTimeout(CommonHttpClient.TIMEOUT)
+                                                                .setConnectionRequestTimeout(CommonHttpClient.TIMEOUT)
                                                                 .build();
         httppost.setConfig(defaultRequestConfig);
         this.initHttpHeader(httppost);
@@ -203,6 +205,7 @@ public class CommonHttpClient {
     }
 
     protected void initHttpHeader(final HttpMessage httpMessage) {
+        httpMessage.addHeader("Referer", this.referer);
     }
 
     private String entityToString(final HttpEntity entity)
@@ -301,5 +304,13 @@ public class CommonHttpClient {
                              expires,
                              version,
                              secure);
+    }
+
+    public String getReferer() {
+        return this.referer;
+    }
+
+    public void setReferer(final String referer) {
+        this.referer = referer;
     }
 }

@@ -1,19 +1,17 @@
-package robot.tnk47;
+package robot.tnk47.quest;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-
-import net.sf.json.JSONObject;
 
 import org.apache.http.message.BasicNameValuePair;
 
 import robot.AbstractEventHandler;
 import robot.Robot;
 
-public class LevelUpHandler extends AbstractEventHandler<Robot> {
+public class QuestStatusUpHandler extends AbstractEventHandler<Robot> {
 
-    public LevelUpHandler(final Robot robot) {
+    public QuestStatusUpHandler(final Robot robot) {
         super(robot);
     }
 
@@ -24,6 +22,7 @@ public class LevelUpHandler extends AbstractEventHandler<Robot> {
                                                                      "0"));
         final int attackPowerLimit = Integer.valueOf(session.getProperty("LevelUpHandler.power.limit",
                                                                          "0"));
+
         final int maxStamina = Integer.valueOf(session.getProperty("maxStamina",
                                                                    "0"));
         final int maxPower = Integer.valueOf(session.getProperty("maxPower",
@@ -35,33 +34,36 @@ public class LevelUpHandler extends AbstractEventHandler<Robot> {
         while (attrPoints > 0) {
             if (staminaLimit > maxStamina + attrStaminaP) {
                 attrStaminaP++;
+                attrPoints--;
+            } else {
+                break;
             }
-            attrPoints--;
         }
         while (attrPoints > 0) {
             if (attackPowerLimit > maxPower + attrPowerP) {
                 attrPowerP++;
+                attrPoints--;
+            } else {
+                break;
             }
-            attrPoints--;
         }
 
-        final String input = this.robot.buildPath("/quest/ajax/put-apportion-attr-ability");
-        final List<BasicNameValuePair> nvps = new LinkedList<BasicNameValuePair>();
-        nvps.add(new BasicNameValuePair("attrStaminaP",
-                                        String.valueOf(attrStaminaP)));
-        nvps.add(new BasicNameValuePair("attrPowerP",
-                                        String.valueOf(attrPowerP)));
+        if (attrStaminaP > 0 && attrPowerP > 0) {
+            final String path = "/quest/ajax/put-apportion-attr-ability";
+            final List<BasicNameValuePair> nvps = new LinkedList<BasicNameValuePair>();
+            nvps.add(new BasicNameValuePair("attrStaminaP",
+                                            String.valueOf(attrStaminaP)));
+            nvps.add(new BasicNameValuePair("attrPowerP",
+                                            String.valueOf(attrPowerP)));
 
-        final String html = this.robot.getHttpClient().post(input, nvps);
+            this.httpPost(path, nvps);
 
-        if (this.log.isDebugEnabled()) {
-            this.log.debug(html);
+            if (this.log.isInfoEnabled()) {
+                this.log.info(String.format("增加了%d体力，增加了%d攻防",
+                                            attrStaminaP,
+                                            attrPowerP));
+            }
         }
-
-        final JSONObject jsonResponse = JSONObject.fromObject(html);
-        final String newToken = jsonResponse.getString("token");
-
-        session.put("token", newToken);
 
         final String callback = session.getProperty("callback");
         this.robot.dispatch(callback);

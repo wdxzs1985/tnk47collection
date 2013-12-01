@@ -1,5 +1,6 @@
 package robot.tnk47;
 
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,8 +9,12 @@ import robot.Robot;
 
 public class MypageHandler extends AbstractEventHandler<Robot> {
 
-    public static final Pattern URL_EVENT_MARATHON_PATTERN = Pattern.compile("event/marathon/event-marathon\\?eventId=([0-9]+)");
-    public static final Pattern URL_STAMINA_PATTERN = Pattern.compile("event/marathon/event-marathon\\?eventId=([0-9]+)");
+    private static final Pattern HTML_TITLE_PATTERN = Pattern.compile("<title>天クロ｜マイページ</title>");
+
+    private boolean checkEventInfomation = true;
+    private boolean checkStampGachaStatus = true;
+    private boolean quest = true;
+    private boolean battle = true;
 
     public MypageHandler(final Robot robot) {
         super(robot);
@@ -17,17 +22,62 @@ public class MypageHandler extends AbstractEventHandler<Robot> {
 
     @Override
     public void handleIt() {
-        final String input = this.robot.buildPath("/mypage");
-        final String html = this.robot.getHttpClient().get(input);
-        if (this.log.isDebugEnabled()) {
-            this.log.debug(html);
+        this.robot.getSession();
+
+        final String html = this.httpGet("/mypage");
+        final Matcher matcher = MypageHandler.HTML_TITLE_PATTERN.matcher(html);
+        if (!matcher.find()) {
+            // 登录奖励
+            this.robot.dispatch("/mypage");
+            return;
         }
-        final Matcher eventMatcher = MypageHandler.URL_EVENT_MARATHON_PATTERN.matcher(html);
-        if (eventMatcher.find()) {
-            final String eventId = eventMatcher.group(1);
-            this.robot.getSession().put("eventId", eventId);
-            this.robot.dispatch("/event/marathon/event-stage-detail");
+
+        this.resolveInputToken(html);
+
+        if (this.checkStampGachaStatus) {
+            this.checkStampGachaStatus = false;
+            this.robot.dispatch("/gacha/stamp-gacha");
+            return;
         }
+
+        if (this.checkEventInfomation) {
+            this.checkEventInfomation = false;
+            this.robot.dispatch("/event-infomation");
+            return;
+        }
+
+        // if (this.checkGift) {
+        // this.checkGift = false;
+        // this.robot.dispatch("/gift");
+        // return;
+        // }
+
+        if (this.quest) {
+            this.quest = false;
+            this.robot.dispatch("/quest");
+            return;
+        }
+
+        if (this.battle) {
+            this.battle = false;
+            this.robot.dispatch("/battle");
+            return;
+        }
+
+        this.log.info("休息一会 _(:3_ ");
+        this.checkStampGachaStatus = true;
+        this.checkEventInfomation = true;
+        this.quest = true;
+        this.battle = true;
+
+        final Properties session = this.robot.getSession();
+        final long sleepTime = Long.valueOf(session.getProperty("MypageHandler.sleepTime",
+                                                                "3600000"));
+        try {
+            Thread.sleep(sleepTime);
+        } catch (final InterruptedException e) {
+        }
+        this.robot.dispatch("/mypage");
     }
 
 }

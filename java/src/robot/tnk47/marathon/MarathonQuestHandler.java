@@ -1,4 +1,4 @@
-package robot.tnk47;
+package robot.tnk47.marathon;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
