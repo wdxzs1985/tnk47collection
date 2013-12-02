@@ -15,6 +15,7 @@ import robot.Robot;
 
 public class BattleDetailHandler extends AbstractBattleHandler {
 
+    private static final Pattern BATTLE_POINT_PATTERN = Pattern.compile("報酬確定!勝利を目指せ!");
     private static final Pattern BATTLE_INVITE_PATTERN = Pattern.compile("救援依頼を出す");
 
     public BattleDetailHandler(final Robot robot) {
@@ -49,18 +50,25 @@ public class BattleDetailHandler extends AbstractBattleHandler {
                 this.sendSupport(supportUserId);
             }
 
-            final JSONObject battleEnemy = this.findBattleEnemy(data);
-            if (battleEnemy != null) {
-                final String userId = battleEnemy.getString("userId");
-                session.put("enemyId", userId);
+            final Matcher battlePointMatcher = BattleDetailHandler.BATTLE_POINT_PATTERN.matcher(html);
+            if (battlePointMatcher.find()) {
                 if (this.log.isInfoEnabled()) {
-                    final String userName = battleEnemy.getString("userName");
-                    final String userLevel = battleEnemy.getString("userLevel");
-                    this.log.info(String.format("向 %s(%s) 发动攻击",
-                                                userName,
-                                                userLevel));
+                    this.log.info("报酬确定,停止攻击。");
                 }
-                return "/battle/battle-check";
+            } else {
+                final JSONObject battleEnemy = this.findBattleEnemy(data);
+                if (battleEnemy != null) {
+                    final String userId = battleEnemy.getString("userId");
+                    session.put("enemyId", userId);
+                    if (this.log.isInfoEnabled()) {
+                        final String userName = battleEnemy.getString("userName");
+                        final String userLevel = battleEnemy.getString("userLevel");
+                        this.log.info(String.format("向 %s(%s) 发动攻击",
+                                                    userName,
+                                                    userLevel));
+                    }
+                    return "/battle/battle-check";
+                }
             }
         }
         return "/mypage";

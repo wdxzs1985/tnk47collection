@@ -11,7 +11,7 @@ import robot.Robot;
 public class PrefectureBattleResultHandler extends AbstractBattleHandler {
 
     private static final Pattern BATTLE_RESULT_PATTERN = Pattern.compile("<section id=\"groupBattleResult\" class=\"(win|lose)\">");
-    private static final Pattern BATTLE_BONUS_PATTERN = Pattern.compile("<a href=\"javascript:void\\(0\\);\" data-prefecture-battle-id=\".*?\" data-bonus-ids=\"(.*?)\">");
+    private static final Pattern BATTLE_BONUS_PATTERN = Pattern.compile("data-bonus-ids=\"([0-9,]*?)\"");
 
     public PrefectureBattleResultHandler(final Robot robot) {
         super(robot);
@@ -27,6 +27,7 @@ public class PrefectureBattleResultHandler extends AbstractBattleHandler {
                                                                 prefectureBattleId,
                                                                 token));
         final String html = this.robot.getHttpClient().get(input);
+        this.resolveInputToken(html);
 
         if (this.log.isInfoEnabled()) {
             final Matcher battleResultMatcher = PrefectureBattleResultHandler.BATTLE_RESULT_PATTERN.matcher(html);

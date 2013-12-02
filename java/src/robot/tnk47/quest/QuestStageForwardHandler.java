@@ -153,6 +153,8 @@ public class QuestStageForwardHandler extends AbstractEventHandler {
             final Properties config = this.robot.getConfig();
             final JSONObject userData = data.getJSONObject("userData");
             final int maxStamina = userData.getInt("maxStamina");
+            final boolean useStaminaToday = Boolean.valueOf(config.getProperty("QuestStageForwardHandler.useStaminaToday",
+                                                                               "false"));
             final boolean useStamina50 = Boolean.valueOf(config.getProperty("QuestStageForwardHandler.useStamina50",
                                                                             "false"));
             final boolean useStamina100 = Boolean.valueOf(config.getProperty("QuestStageForwardHandler.useStamina100",
@@ -165,7 +167,7 @@ public class QuestStageForwardHandler extends AbstractEventHandler {
                 final String code = regenStamina.getString("code");
                 final String name = regenStamina.getString("name");
                 final String itemId = regenStamina.getString("itemId");
-                if (StringUtils.contains(name, "当日")) {
+                if (useStaminaToday && StringUtils.contains(name, "当日")) {
                     session.put("itemId", itemId);
                     session.put("name", name);
                     session.put("callback", "/quest/stage/forward");

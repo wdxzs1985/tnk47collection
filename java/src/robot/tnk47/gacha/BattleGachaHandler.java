@@ -25,8 +25,9 @@ public class BattleGachaHandler extends AbstractGachaHandler {
                                         prefectureBattleId));
         nvps.add(new BasicNameValuePair("bonusIds", bonusIds));
         nvps.add(new BasicNameValuePair("token", token));
-        this.httpPost("/gacha/gacha-battle-reward-animation", nvps);
-
+        final String html = this.httpPost("/gacha/gacha-battle-reward-animation",
+                                          nvps);
+        this.resolveGachaResult(html);
         return "/battle";
     }
 
