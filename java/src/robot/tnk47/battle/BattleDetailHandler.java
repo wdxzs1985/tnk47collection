@@ -1,7 +1,7 @@
 package robot.tnk47.battle;
 
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,13 +10,10 @@ import net.sf.json.JSONObject;
 
 import org.apache.http.message.BasicNameValuePair;
 
-import robot.AbstractEventHandler;
 import robot.Robot;
 
-public class BattleDetailHandler extends AbstractEventHandler<Robot> {
+public class BattleDetailHandler extends AbstractBattleHandler {
 
-	private static final Pattern BATTLE_RESULT_PATTERN = Pattern
-			.compile("nextUrl: \"/battle/prefecture-battle-result\\?prefectureBattleId=(.*)\"");
 	private static final Pattern BATTLE_INVITE_PATTERN = Pattern
 			.compile("救援依頼を出す");
 
@@ -25,99 +22,90 @@ public class BattleDetailHandler extends AbstractEventHandler<Robot> {
 	}
 
 	@Override
-	protected void handleIt() {
-		final Properties session = this.robot.getSession();
-		final String prefectureBattleId = session
-				.getProperty("prefectureBattleId");
+	protected String handleIt() {
+		final Map<String, Object> session = this.robot.getSession();
+		final String prefectureBattleId = (String) session
+				.get("prefectureBattleId");
 		final String path = String.format("/battle?prefectureBattleId=%s",
 				prefectureBattleId);
 		final String html = this.httpGet(path);
 
-		final Matcher battleResultMatcher = BattleDetailHandler.BATTLE_RESULT_PATTERN
-				.matcher(html);
-		if (battleResultMatcher.find()) {
-			session.setProperty("prefectureBattleId", prefectureBattleId);
-			this.robot.dispatch("/battle/prefecture-battle-result");
-			return;
+		if (this.isBattleResult(html)) {
+			return ("/battle/prefecture-battle-result");
 		}
 
 		this.resolveInputToken(html);
 
-		final Matcher inviteMatcher = BATTLE_INVITE_PATTERN.matcher(html);
-		if (inviteMatcher.find()) {
-			this.sendInvite();
-		}
+		this.sendInvite(html);
 		JSONObject jsonPageParams = this.resolvePageParams(html);
 		if (jsonPageParams != null) {
 			final String battleStartType = jsonPageParams
 					.getString("battleStartType");
-			session.setProperty("battleStartType", battleStartType);
+			session.put("battleStartType", battleStartType);
 			final JSONObject userData = jsonPageParams
 					.getJSONObject("userData");
 			final JSONObject data = userData.getJSONObject("data");
-			final JSONArray friendData = data.getJSONArray("friendData");
-			int maxUserLoseCount = 0;
-			JSONObject supportFriend = null;
-			for (int i = 0; i < friendData.size(); i++) {
-				final JSONObject friend = friendData.getJSONObject(i);
-				if (friend.getBoolean("canSupport")) {
-					final int userLoseCount = friend.getInt("userLoseCount");
-					if (maxUserLoseCount <= userLoseCount) {
-						supportFriend = friend;
-						maxUserLoseCount = userLoseCount;
-					}
-				}
-			}
+
+			JSONObject supportFriend = this.findSupportFriend(data);
 			if (supportFriend != null) {
 				final String supportUserId = supportFriend.getString("userId");
 				this.sendSupport(supportUserId);
 			}
 
-			final JSONArray enemyData = data.getJSONArray("enemyData");
-			JSONObject battleEnemy = null;
-			int maxBattlePoint = 0;
-			for (int i = 0; i < enemyData.size(); i++) {
-				final JSONObject enemy = enemyData.getJSONObject(i);
-				final int getBattlePoint = enemy.getInt("getBattlePoint");
-				if (maxBattlePoint < getBattlePoint) {
-					battleEnemy = enemy;
-					maxBattlePoint = getBattlePoint;
-				}
-			}
+			JSONObject battleEnemy = this.findBattleEnemy(data);
 			if (battleEnemy != null) {
 				final String userId = battleEnemy.getString("userId");
-				session.setProperty("enemyId", userId);
+				session.put("enemyId", userId);
 				if (this.log.isInfoEnabled()) {
 					String userName = battleEnemy.getString("userName");
 					String userLevel = battleEnemy.getString("userLevel");
 					this.log.info(String.format("attack to %s(%s)", userName,
 							userLevel));
 				}
-				this.robot.dispatch("/battle/battle-check");
-				return;
+				return ("/battle/battle-check");
 			}
 		}
-		this.robot.dispatch("/mypage");
+		return ("/mypage");
 	}
 
-	private void sendInvite() {
-		final Properties session = this.robot.getSession();
-		final String token = session.getProperty("token");
-		final String path = "/battle/ajax/put-prefecture-battle-invite";
-		final List<BasicNameValuePair> nvps = this.createNameValuePairs();
-		nvps.add(new BasicNameValuePair("token", token));
-		final JSONObject jsonResponse = this.httpPostJSON(path, nvps);
-		this.resolveJsonToken(jsonResponse);
-		if (this.log.isInfoEnabled()) {
-			final JSONObject data = jsonResponse.getJSONObject("data");
-			final String resultMessage = data.getString("resultMessage");
-			this.log.info(resultMessage);
+	private void sendInvite(String html) {
+		final Matcher inviteMatcher = BATTLE_INVITE_PATTERN.matcher(html);
+		if (inviteMatcher.find()) {
+			final Map<String, Object> session = this.robot.getSession();
+			final String token = (String) session.get("token");
+			final String path = "/battle/ajax/put-prefecture-battle-invite";
+			final List<BasicNameValuePair> nvps = this.createNameValuePairs();
+			nvps.add(new BasicNameValuePair("token", token));
+			final JSONObject jsonResponse = this.httpPostJSON(path, nvps);
+			this.resolveJsonToken(jsonResponse);
+			if (this.log.isInfoEnabled()) {
+				final JSONObject data = jsonResponse.getJSONObject("data");
+				final String resultMessage = data.getString("resultMessage");
+				this.log.info(resultMessage);
+			}
 		}
+	}
+
+	private JSONObject findSupportFriend(JSONObject data) {
+		final JSONArray friendData = data.getJSONArray("friendData");
+		int maxUserLoseCount = 0;
+		JSONObject supportFriend = null;
+		for (int i = 0; i < friendData.size(); i++) {
+			final JSONObject friend = friendData.getJSONObject(i);
+			if (friend.getBoolean("canSupport")) {
+				final int userLoseCount = friend.getInt("userLoseCount");
+				if (maxUserLoseCount <= userLoseCount) {
+					supportFriend = friend;
+					maxUserLoseCount = userLoseCount;
+				}
+			}
+		}
+		return supportFriend;
 	}
 
 	private void sendSupport(String supportUserId) {
-		final Properties session = this.robot.getSession();
-		final String token = session.getProperty("token");
+		final Map<String, Object> session = this.robot.getSession();
+		final String token = (String) session.get("token");
 		final String path = "/battle/ajax/put-battle-support";
 		final List<BasicNameValuePair> nvps = this.createNameValuePairs();
 		nvps.add(new BasicNameValuePair("supportUserId", supportUserId));
@@ -129,5 +117,20 @@ public class BattleDetailHandler extends AbstractEventHandler<Robot> {
 			final String supportUserName = data.getString("supportUserName");
 			this.log.info(String.format("给%s发送了应援", supportUserName));
 		}
+	}
+
+	private JSONObject findBattleEnemy(JSONObject data) {
+		final JSONArray enemyData = data.getJSONArray("enemyData");
+		JSONObject battleEnemy = null;
+		int maxBattlePoint = 0;
+		for (int i = 0; i < enemyData.size(); i++) {
+			final JSONObject enemy = enemyData.getJSONObject(i);
+			final int getBattlePoint = enemy.getInt("getBattlePoint");
+			if (maxBattlePoint < getBattlePoint) {
+				battleEnemy = enemy;
+				maxBattlePoint = getBattlePoint;
+			}
+		}
+		return battleEnemy;
 	}
 }

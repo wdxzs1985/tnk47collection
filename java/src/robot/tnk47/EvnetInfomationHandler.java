@@ -10,14 +10,14 @@ import org.apache.http.message.BasicNameValuePair;
 import robot.AbstractEventHandler;
 import robot.Robot;
 
-public class EvnetInfomationHandler extends AbstractEventHandler<Robot> {
+public class EvnetInfomationHandler extends AbstractEventHandler {
 
 	public EvnetInfomationHandler(final Robot robot) {
 		super(robot);
 	}
 
 	@Override
-	public void handleIt() {
+	public String handleIt() {
 		final String input = this.robot
 				.buildPath("/event/ajax/get-current-event-information");
 		final List<BasicNameValuePair> nvps = Collections.emptyList();
@@ -40,10 +40,9 @@ public class EvnetInfomationHandler extends AbstractEventHandler<Robot> {
 			}
 
 			final String linkUrl = currentEventInfoDto.getString("linkUrl");
-			this.robot.dispatch(linkUrl);
-			return;
+			return linkUrl;
 		}
-		this.robot.dispatch("/mypage");
+		return ("/mypage");
 	}
 
 }

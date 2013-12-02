@@ -2,6 +2,7 @@ package robot.tnk47.quest;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import net.sf.json.JSONArray;
@@ -13,134 +14,161 @@ import org.apache.http.message.BasicNameValuePair;
 import robot.AbstractEventHandler;
 import robot.Robot;
 
-public class QuestStageForwardHandler extends AbstractEventHandler<Robot> {
+public class QuestStageForwardHandler extends AbstractEventHandler {
 
-    public QuestStageForwardHandler(final Robot robot) {
-        super(robot);
-    }
+	public QuestStageForwardHandler(final Robot robot) {
+		super(robot);
+	}
 
-    @Override
-    public void handleIt() {
-        final Properties session = this.robot.getSession();
-        final String questId = session.getProperty("questId");
-        final String areaId = session.getProperty("areaId");
-        final String stageId = session.getProperty("stageId");
-        final String token = session.getProperty("token");
-        final String input = this.robot.buildPath("/quest/ajax/put-stage-forward");
-        final List<BasicNameValuePair> nvps = new LinkedList<BasicNameValuePair>();
-        nvps.add(new BasicNameValuePair("questId", questId));
-        nvps.add(new BasicNameValuePair("areaId", areaId));
-        nvps.add(new BasicNameValuePair("stageId", stageId));
-        nvps.add(new BasicNameValuePair("token", token));
+	@Override
+	public String handleIt() {
+		final Map<String, Object> session = this.robot.getSession();
 
-        final String html = this.robot.getHttpClient().post(input, nvps);
+		final String questId = (String) session.get("questId");
+		final String areaId = (String) session.get("areaId");
+		final String stageId = (String) session.get("stageId");
+		final String token = (String) session.get("token");
+		final String path = "/quest/ajax/put-stage-forward";
+		final List<BasicNameValuePair> nvps = new LinkedList<BasicNameValuePair>();
+		nvps.add(new BasicNameValuePair("questId", questId));
+		nvps.add(new BasicNameValuePair("areaId", areaId));
+		nvps.add(new BasicNameValuePair("stageId", stageId));
+		nvps.add(new BasicNameValuePair("token", token));
 
-        final JSONObject jsonResponse = JSONObject.fromObject(html);
-        final String newToken = jsonResponse.getString("token");
-        session.put("token", newToken);
+		final JSONObject jsonResponse = this.httpPostJSON(path, nvps);
+		this.resolveJsonToken(jsonResponse);
+		final JSONObject data = jsonResponse.getJSONObject("data");
 
-        final JSONObject data = jsonResponse.getJSONObject("data");
-        // 通关
-        if (data.getBoolean("clearStage")) {
-            this.robot.dispatch("/quest");
-            return;
-        }
-        // 升级
-        if (data.getBoolean("levelUp")) {
-            this.onLevelUp(data);
-            return;
-        }
-        final String questMessage = data.getString("questMessage");
-        if (!StringUtils.equals(questMessage, "null")) {
-            if (this.log.isInfoEnabled()) {
-                this.log.info(questMessage);
-            }
-            if (StringUtils.equals("行動Ptが足りません", questMessage)) {
-                this.onStaminaOut(data);
-                return;
-            }
-        } else {
-            final String needExpForNextLevel = data.getString("needExpForNextLevel");
-            session.setProperty("needExpForNextLevel", needExpForNextLevel);
-            if (this.log.isInfoEnabled()) {
-                this.log.info(String.format("什么都没有发现，还有[%s]经验升级。",
-                                            needExpForNextLevel));
-            }
-        }
-        this.robot.dispatch("/quest/stage/forward");
-    }
+		this.printAreaEncount(data);
 
-    private void onLevelUp(final JSONObject data) {
-        final Properties session = this.robot.getSession();
-        final JSONObject userData = data.getJSONObject("userData");
-        final String maxStamina = userData.getString("maxStamina");
-        final String maxPower = userData.getString("maxPower");
-        final String attrPoints = userData.getString("attrPoints");
-        final String level = userData.getString("level");
-        if (this.log.isInfoEnabled()) {
-            this.log.info("升到了" + level + "级");
-        }
-        session.put("maxStamina", maxStamina);
-        session.put("maxPower", maxPower);
-        session.put("attrPoints", attrPoints);
-        session.put("callback", "/quest/stage/forward");
-        this.robot.dispatch("/status-up");
-    }
+		// 通关
+		if (data.getBoolean("clearStage")) {
+			return ("/quest");
+		}
 
-    private void onStaminaOut(final JSONObject data) {
-        boolean useItem = false;
-        final Properties session = this.robot.getSession();
-        final JSONObject userData = data.getJSONObject("userData");
-        final int maxStamina = userData.getInt("maxStamina");
-        if (data.containsKey("regenStaminaItems")) {
-            final boolean useStamina50 = Boolean.valueOf(session.getProperty("QuestStageForwardHandler.useStamina50",
-                                                                             "false"));
-            final boolean useStamina100 = Boolean.valueOf(session.getProperty("QuestStageForwardHandler.useStamina100",
-                                                                              "false"));
-            final int needExpForNextLevel = Integer.valueOf(session.getProperty("needExpForNextLevel",
-                                                                                "0"));
-            final JSONArray regenStaminaItems = data.getJSONArray("regenStaminaItems");
-            for (int i = 0; i < regenStaminaItems.size(); i++) {
-                final JSONObject regenStamina = (JSONObject) regenStaminaItems.get(i);
-                final String code = regenStamina.getString("code");
-                final String name = regenStamina.getString("name");
-                final String itemId = regenStamina.getString("itemId");
-                if (StringUtils.contains(name, "当日")) {
-                    session.put("itemId", itemId);
-                    session.put("name", name);
-                    useItem = true;
-                    break;
-                } else if (StringUtils.contains(code, "stamina50") && useStamina50
-                           && needExpForNextLevel > maxStamina / 2) {
-                    session.put("itemId", itemId);
-                    session.put("name", name);
-                    useItem = true;
-                    break;
-                } else if (StringUtils.contains(code, "stamina100") && useStamina100
-                           && needExpForNextLevel > maxStamina) {
-                    session.put("itemId", itemId);
-                    session.put("name", name);
-                    useItem = true;
-                    break;
-                }
-            }
-        }
-        if (useItem) {
-            session.put("callback", "/quest/stage/forward");
-            this.robot.dispatch("/use-item");
-        } else {
-            final boolean regenerate = Boolean.valueOf(session.getProperty("QuestStageForwardHandler.regenerate",
-                                                                           "false"));
-            if (regenerate) {
-                if (this.log.isInfoEnabled()) {
-                    this.log.info("等回血");
-                }
-                this.robot.dispatch("/mypage");
-            } else {
-                if (this.log.isInfoEnabled()) {
-                    this.log.info("放弃治疗了");
-                }
-            }
-        }
-    }
+		// 升级
+		if (data.getBoolean("levelUp")) {
+			return this.onLevelUp(data);
+		}
+
+		if (this.isMaxPower(data)) {
+			session.put("quest", true);
+			return ("/battle");
+		}
+		//
+		final String questMessage = data.getString("questMessage");
+		if (!StringUtils.equals(questMessage, "null")) {
+			if (this.log.isInfoEnabled()) {
+				this.log.info(questMessage);
+			}
+			if (StringUtils.equals("行動Ptが足りません", questMessage)) {
+				return this.onStaminaOut(data);
+			} else if (StringUtils.equals("隊士発見!!", questMessage)) {
+				// do nothing
+			}
+		} else {
+			if (this.log.isInfoEnabled()) {
+				final String needExpForNextLevel = data
+						.getString("needExpForNextLevel");
+				session.put("needExpForNextLevel", needExpForNextLevel);
+				this.log.info(String.format("什么都没有发现，还有[%s]经验升级。",
+						needExpForNextLevel));
+			}
+		}
+		return ("/quest/stage/forward");
+	}
+
+	private void printAreaEncount(JSONObject data) {
+		if (this.log.isInfoEnabled()) {
+			String areaEncountType = data.getString("areaEncountType");
+			if (StringUtils.equals(areaEncountType, "ITEM")) {
+				JSONObject encountCardData = data
+						.getJSONObject("encountCardData");
+				String name = encountCardData.getString("name");
+				this.log.info(String.format("隊士発見: %s", name));
+			} else if (StringUtils.equals(areaEncountType, "EVENT")) {
+				String encountMessage = data.getString("encountMessage");
+				this.log.info(encountMessage);
+			}
+		}
+	}
+
+	private boolean isMaxPower(final JSONObject data) {
+		final JSONObject userData = data.getJSONObject("userData");
+		final int maxPower = userData.getInt("maxPower");
+		final int attackPower = userData.getInt("attackPower");
+		return maxPower == attackPower;
+	}
+
+	private String onLevelUp(final JSONObject data) {
+		final Map<String, Object> session = this.robot.getSession();
+
+		final JSONObject userData = data.getJSONObject("userData");
+		final int maxStamina = userData.getInt("maxStamina");
+		final int maxPower = userData.getInt("maxPower");
+		final int attrPoints = userData.getInt("attrPoints");
+		final int level = userData.getInt("level");
+		if (this.log.isInfoEnabled()) {
+			this.log.info(String.format("升到了%d级", level));
+		}
+		session.put("maxStamina", maxStamina);
+		session.put("maxPower", maxPower);
+		session.put("attrPoints", attrPoints);
+		session.put("callback", "/quest/stage/forward");
+		return "/status-up";
+	}
+
+	private String onStaminaOut(final JSONObject data) {
+		if (this.isUseItem(data)) {
+			return ("/use-item");
+		} else {
+			if (this.log.isInfoEnabled()) {
+				this.log.info("等回血");
+			}
+			return ("/mypage");
+		}
+	}
+
+	private boolean isUseItem(JSONObject data) {
+		if (data.containsKey("regenStaminaItems")) {
+			final Map<String, Object> session = this.robot.getSession();
+			Properties config = this.robot.getConfig();
+			final JSONObject userData = data.getJSONObject("userData");
+			final int maxStamina = userData.getInt("maxStamina");
+			final boolean useStamina50 = Boolean.valueOf(config.getProperty(
+					"QuestStageForwardHandler.useStamina50", "false"));
+			final boolean useStamina100 = Boolean.valueOf(config.getProperty(
+					"QuestStageForwardHandler.useStamina100", "false"));
+			final int needExpForNextLevel = Integer.valueOf(config.getProperty(
+					"needExpForNextLevel", "0"));
+			final JSONArray regenStaminaItems = data
+					.getJSONArray("regenStaminaItems");
+			for (int i = 0; i < regenStaminaItems.size(); i++) {
+				final JSONObject regenStamina = (JSONObject) regenStaminaItems
+						.get(i);
+				final String code = regenStamina.getString("code");
+				final String name = regenStamina.getString("name");
+				final String itemId = regenStamina.getString("itemId");
+				if (StringUtils.contains(name, "当日")) {
+					session.put("itemId", itemId);
+					session.put("name", name);
+					session.put("callback", "/quest/stage/forward");
+					return true;
+				} else if (StringUtils.contains(code, "stamina50")
+						&& useStamina50 && needExpForNextLevel > maxStamina / 2) {
+					session.put("itemId", itemId);
+					session.put("name", name);
+					session.put("callback", "/quest/stage/forward");
+					return true;
+				} else if (StringUtils.contains(code, "stamina100")
+						&& useStamina100 && needExpForNextLevel > maxStamina) {
+					session.put("itemId", itemId);
+					session.put("name", name);
+					session.put("callback", "/quest/stage/forward");
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

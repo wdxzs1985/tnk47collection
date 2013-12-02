@@ -1,5 +1,6 @@
 package robot.tnk47.quest;
 
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,7 +8,7 @@ import java.util.regex.Pattern;
 import robot.AbstractEventHandler;
 import robot.Robot;
 
-public class QuestHandler extends AbstractEventHandler<Robot> {
+public class QuestHandler extends AbstractEventHandler {
 
 	private static final Pattern STAGE_INTRODUCTION_PATTERN = Pattern
 			.compile("<a href=\"/quest\\?introductionFinish=true\">");
@@ -21,34 +22,34 @@ public class QuestHandler extends AbstractEventHandler<Robot> {
 	}
 
 	@Override
-	protected void handleIt() {
-		final Properties session = this.robot.getSession();
-		String html = this.httpGet("/quest");
-
-		final Matcher stageIntrodutionMatcher = QuestHandler.STAGE_INTRODUCTION_PATTERN
-				.matcher(html);
-		if (stageIntrodutionMatcher.find()) {
-			if (this.log.isInfoEnabled()) {
-				this.log.info("进入新关卡");
-			}
-			html = this.httpGet("/quest?introductionFinish=true");
-		}
-
-		final Matcher bossMatcher = QuestHandler.BOSS_PATTERN.matcher(html);
-		if (bossMatcher.find()) {
-			if (this.log.isInfoEnabled()) {
-				this.log.info("BOSS出现");
-			}
-			this.resolveInputToken(html);
-			this.robot.dispatch("/quest/boss-animation");
-			return;
-		}
-
-		this.resolveInputToken(html);
-
-		boolean autoSelectStage = Boolean.valueOf(session.getProperty(
+	protected String handleIt() {
+		final Map<String, Object> session = this.robot.getSession();
+		Properties config = this.robot.getConfig();
+		boolean autoSelectStage = Boolean.valueOf(config.getProperty(
 				"QuestHandler.autoSelectStage", "true"));
 		if (autoSelectStage) {
+			String html = this.httpGet("/quest");
+
+			final Matcher stageIntrodutionMatcher = QuestHandler.STAGE_INTRODUCTION_PATTERN
+					.matcher(html);
+			if (stageIntrodutionMatcher.find()) {
+				if (this.log.isInfoEnabled()) {
+					this.log.info("进入新关卡");
+				}
+				html = this.httpGet("/quest?introductionFinish=true");
+			}
+
+			final Matcher bossMatcher = QuestHandler.BOSS_PATTERN.matcher(html);
+			if (bossMatcher.find()) {
+				if (this.log.isInfoEnabled()) {
+					this.log.info("BOSS出现");
+				}
+				this.resolveInputToken(html);
+				return ("/quest/boss-animation");
+			}
+
+			this.resolveInputToken(html);
+
 			final Matcher matcher = QuestHandler.STAGE_DETAIL_PATTERN
 					.matcher(html);
 			if (matcher.find()) {
@@ -56,20 +57,22 @@ public class QuestHandler extends AbstractEventHandler<Robot> {
 				final String areaId = matcher.group(2);
 				final String stageId = matcher.group(3);
 
-				session.setProperty("questId", questId);
-				session.setProperty("areaId", areaId);
-				session.setProperty("stageId", stageId);
+				session.put("questId", questId);
+				session.put("areaId", areaId);
+				session.put("stageId", stageId);
 			}
 		} else {
+			final String questId = config.getProperty("QuestHandler.questId",
+					"1");
+			final String areaId = config
+					.getProperty("QuestHandler.areaId", "1");
+			final String stageId = config.getProperty("QuestHandler.stageId",
+					"1");
 
-			final String questId = session.getProperty("QuestHandler.questId");
-			final String areaId = session.getProperty("QuestHandler.areaId");
-			final String stageId = session.getProperty("QuestHandler.stageId");
-
-			session.setProperty("questId", questId);
-			session.setProperty("areaId", areaId);
-			session.setProperty("stageId", stageId);
+			session.put("questId", questId);
+			session.put("areaId", areaId);
+			session.put("stageId", stageId);
 		}
-		this.robot.dispatch("/quest/stage/detail");
+		return ("/quest/stage/detail");
 	}
 }

@@ -5,7 +5,7 @@ package robot;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,8 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.message.BasicNameValuePair;
 
-public abstract class AbstractEventHandler<T extends Robot> implements
-		EventHandler {
+public abstract class AbstractEventHandler implements EventHandler {
 
 	private static final Pattern PAGE_PARAMS_PATTERN = Pattern
 			.compile("tnk.pageParams = (\\{.*\\});");
@@ -24,9 +23,9 @@ public abstract class AbstractEventHandler<T extends Robot> implements
 			.compile("<input id=\"__token\" type=\"hidden\" value=\"([a-zA-Z0-9]{6})\" data-page-id=\".*\">");
 
 	protected final Log log;
-	protected final T robot;
+	protected final Robot robot;
 
-	public AbstractEventHandler(final T robot) {
+	public AbstractEventHandler(final Robot robot) {
 		this.robot = robot;
 		this.log = LogFactory.getLog(this.getClass());
 	}
@@ -34,25 +33,25 @@ public abstract class AbstractEventHandler<T extends Robot> implements
 	@Override
 	public final void handle() {
 		this.before();
-		this.handleIt();
+		this.robot.dispatch(this.handleIt());
 		this.after();
 	}
 
 	protected void before() {
 	}
 
-	protected abstract void handleIt();
+	protected abstract String handleIt();
 
 	protected void after() {
 	}
 
 	protected void resolveInputToken(final String html) {
-		final Properties session = this.robot.getSession();
+		final Map<String, Object> session = this.robot.getSession();
 		final Matcher tokenMatcher = AbstractEventHandler.INPUT_TOKEN_PATTERN
 				.matcher(html);
 		if (tokenMatcher.find()) {
 			final String newToken = tokenMatcher.group(1);
-			session.setProperty("token", newToken);
+			session.put("token", newToken);
 		}
 	}
 
@@ -68,9 +67,9 @@ public abstract class AbstractEventHandler<T extends Robot> implements
 	}
 
 	protected void resolveJsonToken(final JSONObject jsonResponse) {
-		final Properties session = this.robot.getSession();
+		final Map<String, Object> session = this.robot.getSession();
 		final String newToken = jsonResponse.getString("token");
-		session.setProperty("token", newToken);
+		session.put("token", newToken);
 	}
 
 	protected String httpGet(final String path) {

@@ -1,6 +1,6 @@
 package robot.tnk47.quest;
 
-import java.util.Properties;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,8 +8,8 @@ import robot.AbstractEventHandler;
 import robot.EventHandler;
 import robot.Robot;
 
-public class QuestStageDetailHandler extends AbstractEventHandler<Robot>
-		implements EventHandler {
+public class QuestStageDetailHandler extends AbstractEventHandler implements
+		EventHandler {
 
 	private static final Pattern STAGE_NAME_PATTERN = Pattern
 			.compile("<p>(\\d+章)&nbsp;(\\d+-\\d+)&nbsp;<span>(.*?)</span></p>");
@@ -19,11 +19,12 @@ public class QuestStageDetailHandler extends AbstractEventHandler<Robot>
 	}
 
 	@Override
-	protected void handleIt() {
-		final Properties session = this.robot.getSession();
-		final String questId = session.getProperty("questId");
-		final String areaId = session.getProperty("areaId");
-		final String stageId = session.getProperty("stageId");
+	protected String handleIt() {
+		final Map<String, Object> session = this.robot.getSession();
+
+		final String questId = (String) session.get("questId");
+		final String areaId = (String) session.get("areaId");
+		final String stageId = (String) session.get("stageId");
 		final String path = String.format(
 				"/quest/stage-detail?questId=%s&areaId=%s&stageId=%s", questId,
 				areaId, stageId);
@@ -40,8 +41,7 @@ public class QuestStageDetailHandler extends AbstractEventHandler<Robot>
 						section, region));
 			}
 		}
-
-		this.robot.dispatch("/quest/stage/forward");
+		return ("/quest/stage/forward");
 	}
 
 }

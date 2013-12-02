@@ -4,14 +4,14 @@ import net.sf.json.JSONObject;
 import robot.AbstractEventHandler;
 import robot.Robot;
 
-public class GiftHandler extends AbstractEventHandler<Robot> {
+public class GiftHandler extends AbstractEventHandler {
 
 	public GiftHandler(final Robot robot) {
 		super(robot);
 	}
 
 	@Override
-	public void handleIt() {
+	public String handleIt() {
 		String html = this.httpGet("/gift");
 
 		JSONObject jsonPageParams = this.resolvePageParams(html);
@@ -27,7 +27,7 @@ public class GiftHandler extends AbstractEventHandler<Robot> {
 			}
 		}
 
-		this.robot.dispatch("/mypage");
+		return ("/mypage");
 	}
 
 }

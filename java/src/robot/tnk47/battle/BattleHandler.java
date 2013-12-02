@@ -1,37 +1,26 @@
 package robot.tnk47.battle;
 
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang3.StringUtils;
 
-import robot.AbstractEventHandler;
 import robot.Robot;
 
-public class BattleHandler extends AbstractEventHandler<Robot> {
-
-	private static final Pattern BATTLE_RESULT_PATTERN = Pattern
-			.compile("nextUrl: \"/battle/prefecture-battle-result\\?prefectureBattleId=(.*)\"");
+public class BattleHandler extends AbstractBattleHandler {
 
 	public BattleHandler(final Robot robot) {
 		super(robot);
 	}
 
 	@Override
-	protected void handleIt() {
-		final Properties session = this.robot.getSession();
+	protected String handleIt() {
+		final Map<String, Object> session = this.robot.getSession();
 		final String html = this.httpGet("/battle");
 
-		final Matcher battleResultMatcher = BattleHandler.BATTLE_RESULT_PATTERN
-				.matcher(html);
-		if (battleResultMatcher.find()) {
-			final String prefectureBattleId = battleResultMatcher.group(1);
-			session.setProperty("prefectureBattleId", prefectureBattleId);
-			this.robot.dispatch("/battle/prefecture-battle-result");
-			return;
+		if (this.isBattleResult(html)) {
+			return ("/battle/prefecture-battle-result");
 		}
 
 		this.resolveInputToken(html);
@@ -40,7 +29,7 @@ public class BattleHandler extends AbstractEventHandler<Robot> {
 		if (jsonPageParams != null) {
 			final String battleStartType = jsonPageParams
 					.getString("battleStartType");
-			session.setProperty("battleStartType", battleStartType);
+			session.put("battleStartType", battleStartType);
 
 			if (StringUtils.equals(battleStartType, "1")) {
 				if (this.log.isInfoEnabled()) {
@@ -48,22 +37,18 @@ public class BattleHandler extends AbstractEventHandler<Robot> {
 				}
 				final String prefectureId = jsonPageParams
 						.getString("prefectureId");
-				session.setProperty("prefectureId", prefectureId);
-				this.robot.dispatch("/battle/prefecture-battle-list");
-				return;
+				session.put("prefectureId", prefectureId);
+				return ("/battle/prefecture-battle-list");
 			} else {
 				if (this.log.isInfoEnabled()) {
 					this.log.info("合战中");
 				}
-
 				final String prefectureBattleId = jsonPageParams
 						.getString("prefectureBattleId");
-				session.setProperty("prefectureBattleId", prefectureBattleId);
-				this.robot.dispatch("/battle/detail");
-				return;
+				session.put("prefectureBattleId", prefectureBattleId);
+				return ("/battle/detail");
 			}
 		}
-
-		this.robot.dispatch("/mypage");
+		return ("/mypage");
 	}
 }

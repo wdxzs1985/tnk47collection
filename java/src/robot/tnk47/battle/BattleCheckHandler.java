@@ -1,33 +1,28 @@
 package robot.tnk47.battle;
 
 import java.util.List;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
 
 import org.apache.http.message.BasicNameValuePair;
 
-import robot.AbstractEventHandler;
 import robot.Robot;
 
-public class BattleCheckHandler extends AbstractEventHandler<Robot> {
-
-	private static final Pattern BATTLE_RESULT_PATTERN = Pattern
-			.compile("nextUrl: \"/battle/prefecture-battle-result\\?prefectureBattleId=(.*)\"");
+public class BattleCheckHandler extends AbstractBattleHandler {
 
 	public BattleCheckHandler(final Robot robot) {
 		super(robot);
 	}
 
 	@Override
-	protected void handleIt() {
-		final Properties session = this.robot.getSession();
-		final String battleStartType = session.getProperty("battleStartType");
-		final String enemyId = session.getProperty("enemyId");
-		final String prefectureBattleId = session
-				.getProperty("prefectureBattleId");
+	protected String handleIt() {
+		final Map<String, Object> session = this.robot.getSession();
+
+		final String battleStartType = (String) session.get("battleStartType");
+		final String enemyId = (String) session.get("enemyId");
+		final String prefectureBattleId = (String) session
+				.get("prefectureBattleId");
 		final String path = "/battle/battle-check";
 		final List<BasicNameValuePair> nvps = this.createNameValuePairs();
 		nvps.add(new BasicNameValuePair("battleStartType", battleStartType));
@@ -37,12 +32,8 @@ public class BattleCheckHandler extends AbstractEventHandler<Robot> {
 
 		final String html = this.httpPost(path, nvps);
 
-		final Matcher battleResultMatcher = BattleCheckHandler.BATTLE_RESULT_PATTERN
-				.matcher(html);
-		if (battleResultMatcher.find()) {
-			session.setProperty("prefectureBattleId", prefectureBattleId);
-			this.robot.dispatch("/battle/prefecture-battle-result");
-			return;
+		if (this.isBattleResult(html)) {
+			return ("/battle/prefecture-battle-result");
 		}
 
 		this.resolveInputToken(html);
@@ -57,16 +48,15 @@ public class BattleCheckHandler extends AbstractEventHandler<Robot> {
 			if (curPower >= spendAttackPower || spendAttackPower == 0) {
 				final String deckId = jsonPageParams
 						.getString("selectedDeckId");
-				session.setProperty("deckId", deckId);
-				session.setProperty("attackType", "1");
-				this.robot.dispatch("/battle/battle-animation");
-				return;
+				session.put("deckId", deckId);
+				session.put("attackType", "1");
+				return ("/battle/battle-animation");
 			} else {
 				if (this.log.isInfoEnabled()) {
 					this.log.info("攻pt不足");
 				}
 			}
 		}
-		this.robot.dispatch("/mypage");
+		return ("/mypage");
 	}
 }
