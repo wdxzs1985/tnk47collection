@@ -16,70 +16,92 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.http.message.BasicNameValuePair;
 
 public abstract class AbstractEventHandler<T extends Robot> implements
-        EventHandler {
-    protected static final Pattern INPUT_TOKEN_PATTERN = Pattern.compile("<input id=\"__token\" type=\"hidden\" value=\"([a-zA-Z0-9]{6})\" data-page-id=\".*\">");
+		EventHandler {
 
-    protected final Log log;
-    protected final T robot;
+	private static final Pattern PAGE_PARAMS_PATTERN = Pattern
+			.compile("tnk.pageParams = (\\{.*\\});");
+	private static final Pattern INPUT_TOKEN_PATTERN = Pattern
+			.compile("<input id=\"__token\" type=\"hidden\" value=\"([a-zA-Z0-9]{6})\" data-page-id=\".*\">");
 
-    public AbstractEventHandler(final T robot) {
-        this.robot = robot;
-        this.log = LogFactory.getLog(this.getClass());
-    }
+	protected final Log log;
+	protected final T robot;
 
-    @Override
-    public final void handle() {
-        this.before();
-        this.handleIt();
-        this.after();
-    }
+	public AbstractEventHandler(final T robot) {
+		this.robot = robot;
+		this.log = LogFactory.getLog(this.getClass());
+	}
 
-    protected void before() {
-    }
+	@Override
+	public final void handle() {
+		this.before();
+		this.handleIt();
+		this.after();
+	}
 
-    protected abstract void handleIt();
+	protected void before() {
+	}
 
-    protected void after() {
-    }
+	protected abstract void handleIt();
 
-    protected void resolveInputToken(final String html) {
-        final Properties session = this.robot.getSession();
-        final Matcher tokenMatcher = AbstractEventHandler.INPUT_TOKEN_PATTERN.matcher(html);
-        if (tokenMatcher.find()) {
-            final String newToken = tokenMatcher.group(1);
-            session.setProperty("token", newToken);
-        }
-    }
+	protected void after() {
+	}
 
-    protected String httpGet(final String path) {
-        final String url = this.robot.buildPath(path);
-        final String html = this.robot.getHttpClient().get(url);
-        this.robot.getHttpClient().setReferer(url);
-        return html;
-    }
+	protected void resolveInputToken(final String html) {
+		final Properties session = this.robot.getSession();
+		final Matcher tokenMatcher = AbstractEventHandler.INPUT_TOKEN_PATTERN
+				.matcher(html);
+		if (tokenMatcher.find()) {
+			final String newToken = tokenMatcher.group(1);
+			session.setProperty("token", newToken);
+		}
+	}
 
-    protected String httpPost(final String path,
-                              final List<BasicNameValuePair> nvps) {
-        final String url = this.robot.buildPath(path);
-        final String html = this.robot.getHttpClient().post(url, nvps);
-        this.robot.getHttpClient().setReferer(url);
-        return html;
-    }
+	protected JSONObject resolvePageParams(final String html) {
+		final Matcher pageParamsMatcher = AbstractEventHandler.PAGE_PARAMS_PATTERN
+				.matcher(html);
+		if (pageParamsMatcher.find()) {
+			final String pageParams = pageParamsMatcher.group(1);
+			final JSONObject jsonPageParams = JSONObject.fromObject(pageParams);
+			return jsonPageParams;
+		}
+		return null;
+	}
 
-    protected JSONObject httpGetJSON(final String path) {
-        final String url = this.robot.buildPath(path);
-        final String html = this.robot.getHttpClient().get(url);
-        return JSONObject.fromObject(html);
-    }
+	protected void resolveJsonToken(final JSONObject jsonResponse) {
+		final Properties session = this.robot.getSession();
+		final String newToken = jsonResponse.getString("token");
+		session.setProperty("token", newToken);
+	}
 
-    protected JSONObject httpPostJSON(final String path,
-                                      final List<BasicNameValuePair> nvps) {
-        final String url = this.robot.buildPath(path);
-        final String html = this.robot.getHttpClient().post(url, nvps);
-        return JSONObject.fromObject(html);
-    }
+	protected String httpGet(final String path) {
+		final String url = this.robot.buildPath(path);
+		final String html = this.robot.getHttpClient().get(url);
+		this.robot.getHttpClient().setReferer(url);
+		return html;
+	}
 
-    protected List<BasicNameValuePair> createNameValuePairs() {
-        return new LinkedList<BasicNameValuePair>();
-    }
+	protected String httpPost(final String path,
+			final List<BasicNameValuePair> nvps) {
+		final String url = this.robot.buildPath(path);
+		final String html = this.robot.getHttpClient().post(url, nvps);
+		this.robot.getHttpClient().setReferer(url);
+		return html;
+	}
+
+	protected JSONObject httpGetJSON(final String path) {
+		final String url = this.robot.buildPath(path);
+		final String html = this.robot.getHttpClient().get(url);
+		return JSONObject.fromObject(html);
+	}
+
+	protected JSONObject httpPostJSON(final String path,
+			final List<BasicNameValuePair> nvps) {
+		final String url = this.robot.buildPath(path);
+		final String html = this.robot.getHttpClient().post(url, nvps);
+		return JSONObject.fromObject(html);
+	}
+
+	protected List<BasicNameValuePair> createNameValuePairs() {
+		return new LinkedList<BasicNameValuePair>();
+	}
 }
