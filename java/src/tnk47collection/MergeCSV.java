@@ -17,6 +17,7 @@ public class MergeCSV implements Runnable {
 		new MergeCSV().run();
 	}
 
+	public static final String PRE_CSV = "pre.csv";
 	public static final String DATA_CSV = "data/step3";
 	public static final String DATA2_CSV = "data2/step3";
 	public static final String OUTPUT = "card.csv";
@@ -26,11 +27,24 @@ public class MergeCSV implements Runnable {
 		final Map<String, String> mergeMap = new HashMap<String, String>();
 
 		try {
+			this.readPreDataIntoMap(mergeMap);
 			this.readDataIntoMap(mergeMap);
 			this.readData2IntoMap(mergeMap);
 			FileUtils.writeLines(new File(OUTPUT), mergeMap.values());
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void readPreDataIntoMap(Map<String, String> mergeMap)
+			throws IOException {
+		final List<String> inputLines = FileUtils.readLines(new File(PRE_CSV));
+		for (String line : inputLines) {
+			String[] prop = StringUtils.splitPreserveAllTokens(line, ",");
+			String name = prop[0];
+			if (!mergeMap.containsKey(name)) {
+				mergeMap.put(name, line);
+			}
 		}
 	}
 
@@ -43,31 +57,34 @@ public class MergeCSV implements Runnable {
 			for (String line : inputLines) {
 				final String[] prop = StringUtils.splitPreserveAllTokens(line,
 						",");
-				final String ill = prop[0];
 				final String name = prop[1];
-				final String region = prop[3];
-				final String pref = prop[4];
-				final String type = prop[5];
+				if (!mergeMap.containsKey(name)) {
+					final String ill = prop[0];
+					final String region = prop[3];
+					final String pref = prop[4];
+					final String type = prop[5];
 
-				String rarilites = prop[7];
-				rarilites = StringUtils.replace(rarilites, "SSレア", "SSR");
-				rarilites = StringUtils.replace(rarilites, "Sレア", "SR");
-				rarilites = StringUtils.replace(rarilites, "ハイレア", "HR");
-				rarilites = StringUtils.replace(rarilites, "レア", "R");
-				rarilites = StringUtils.replace(rarilites, "ハイノーマル", "HN");
-				rarilites = StringUtils.replace(rarilites, "ノーマル", "N");
-				rarilites = StringUtils.replace(rarilites, "スペシャル", "SP");
+					String rarilites = prop[7];
+					rarilites = StringUtils.replace(rarilites, "SSレア", "SSR");
+					rarilites = StringUtils.replace(rarilites, "Sレア", "SR");
+					rarilites = StringUtils.replace(rarilites, "ハイレア", "HR");
+					rarilites = StringUtils.replace(rarilites, "レア", "R");
+					rarilites = StringUtils.replace(rarilites, "ハイノーマル", "HN");
+					rarilites = StringUtils.replace(rarilites, "ノーマル", "N");
+					rarilites = StringUtils.replace(rarilites, "スペシャル", "SP");
 
-				StringBuilder sb = new StringBuilder();
-				sb.append(name).append(",");
-				sb.append(region).append(",");
-				sb.append(pref).append(",");
-				sb.append(rarilites).append(",");
-				sb.append(type).append(",");
-				sb.append(ill).append(",");
-				sb.append(3);
-
-				mergeMap.put(name, sb.toString());
+					StringBuilder sb = new StringBuilder();
+					sb.append(name).append(",");
+					sb.append(region).append(",");
+					sb.append(pref).append(",");
+					sb.append(rarilites).append(",");
+					sb.append(type).append(",");
+					sb.append(ill).append(",");
+					sb.append(3);
+					if (!mergeMap.containsKey(name)) {
+						mergeMap.put(name, sb.toString());
+					}
+				}
 			}
 		}
 	}
@@ -83,25 +100,28 @@ public class MergeCSV implements Runnable {
 			for (String line : inputLines) {
 				String[] prop = StringUtils.splitPreserveAllTokens(line, ",");
 				String name = prop[3];
-				String pref = prop[1];
-				String region = regionMap.get(prop[1]);
-				String rarilites = prop[2];
-				rarilites = StringUtils.replace(rarilites, "ssrare", "SSR");
-				rarilites = StringUtils.replace(rarilites, "srare", "SR");
-				rarilites = StringUtils.replace(rarilites, "hrare", "HR");
-				final String type = "";
-				String ill = prop[0];
+				if (!mergeMap.containsKey(name)) {
+					String pref = prop[1];
+					String region = regionMap.get(prop[1]);
+					String rarilites = prop[2];
+					rarilites = StringUtils.replace(rarilites, "ssrare", "SSR");
+					rarilites = StringUtils.replace(rarilites, "srare", "SR");
+					rarilites = StringUtils.replace(rarilites, "hrare", "HR");
+					final String type = "";
+					String ill = prop[0];
 
-				StringBuilder sb = new StringBuilder();
-				sb.append(name).append(",");
-				sb.append(region).append(",");
-				sb.append(pref).append(",");
-				sb.append(rarilites).append(",");
-				sb.append(type).append(",");
-				sb.append(ill).append(",");
-				sb.append(3);
-
-				mergeMap.put(name, sb.toString());
+					StringBuilder sb = new StringBuilder();
+					sb.append(name).append(",");
+					sb.append(region).append(",");
+					sb.append(pref).append(",");
+					sb.append(rarilites).append(",");
+					sb.append(type).append(",");
+					sb.append(ill).append(",");
+					sb.append(3);
+					if (!mergeMap.containsKey(name)) {
+						mergeMap.put(name, sb.toString());
+					}
+				}
 			}
 		}
 	}
