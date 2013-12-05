@@ -16,51 +16,66 @@ import common.CommonHttpClient;
 import common.SystemConstants;
 
 public class DownloadHTML implements Runnable {
-	private final CommonHttpClient httpClient;
+	private final CommonHttpClient httpClient = new CommonHttpClient();
 	private final int start;
 	private final int end;
-	private final Log log;
+	private final Log log = LogFactory.getLog(DownloadHTML.class);
+	private final File cookie = new File("cookie");
 
 	public static void main(String[] args) {
-		DownloadHTML worker = new DownloadHTML(3849, 7284);
+		DownloadHTML worker = new DownloadHTML(7700, 8000);
 		worker.run();
 	}
 
 	public DownloadHTML(int start, int end) {
-		this.log = LogFactory.getLog(DownloadHTML.class);
-		this.httpClient = new CommonHttpClient();
+		this.httpClient.loadCookie(this.cookie);
 		this.start = start;
 		this.end = end;
 	}
 
 	@Override
 	public void run() {
-		this.httpGet("/");
-		if (this.login()) {
-			this.httpGet("/mypage");
-			for (int i = this.start; i <= this.end; i++) {
-				String html = this.httpGet(String.format(
-						"/gacha/gacha-detail?gachaId=%d", i));
-				String output = String.format("data2/step1/%d.html", i);
+		if (this.needLogin()) {
+			if (this.login()) {
+				this.log.info("login ok");
+			} else {
+				return;
+			}
+		}
+		this.httpGet("/mypage");
+		for (int i = this.start; i <= this.end; i += 10) {
+			String html = this.httpGet(String.format(
+					"/gacha/gacha-detail?gachaId=%d", i));
+			String output = String.format("data2/step1/%d.html", i);
+			if (!StringUtils.contains(html, "ページが表示できませんでした。ごめんなさい。")) {
 				try {
 					File file = new File(output);
 					FileUtils.write(file, html, SystemConstants.ENCODING);
 				} catch (IOException e) {
 					this.log.error(e.getMessage(), e);
 				}
-				try {
-					int sleepTime = 1000 + RandomUtils.nextInt(1000);
-					Thread.sleep(sleepTime);
-				} catch (InterruptedException e) {
-				}
+			}
+			try {
+				int sleepTime = 1000 + RandomUtils.nextInt(1000);
+				Thread.sleep(sleepTime);
+			} catch (InterruptedException e) {
 			}
 		}
+		this.httpClient.saveCookie(this.cookie);
+	}
+
+	public boolean needLogin() {
+		String html = this.httpGet("/");
+		if (StringUtils.contains(html, "<title>Ameba</title>")) {
+			return true;
+		}
+		return false;
 	}
 
 	public boolean login() {
 		final String url = "https://login.user.ameba.jp/web/login";
-		final String username = "bushing";
-		final String password = "wangjue";
+		final String username = "bushing2";
+		final String password = "wdxzs1985";
 
 		final List<BasicNameValuePair> nvps = new LinkedList<BasicNameValuePair>();
 		nvps.add(new BasicNameValuePair("username", username));

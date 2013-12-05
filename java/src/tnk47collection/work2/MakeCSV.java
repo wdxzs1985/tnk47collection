@@ -22,7 +22,7 @@ public class MakeCSV implements Runnable {
 	private final int number;
 
 	public static void main(String[] args) {
-		for (int i = 1; i < 3001; i++) {
+		for (int i = 1; i < 7880; i++) {
 			executor.execute(new MakeCSV(i));
 		}
 		executor.shutdown();

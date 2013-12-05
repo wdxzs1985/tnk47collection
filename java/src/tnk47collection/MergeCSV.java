@@ -1,88 +1,109 @@
-package tnk47collection.work2;
+package tnk47collection;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.lang3.StringUtils;
 
-public class MakeJSON implements Runnable {
-
-	public static final String INPUT_DIR = "data2/step3";
-	public static final String OUTPUT = "data2/step4/card.json";
+public class MergeCSV implements Runnable {
 
 	public static void main(String[] args) {
-		new MakeJSON().run();
+		new MergeCSV().run();
 	}
+
+	public static final String DATA_CSV = "data/step3";
+	public static final String DATA2_CSV = "data2/step3";
+	public static final String OUTPUT = "card.csv";
 
 	@Override
 	public void run() {
-		Map<String, String> regionMap = this.getRegionMap();
-
-		System.out.printf("%s start\n", this.getClass().getSimpleName());
-
-		Set<String> mergeLines = new HashSet<>();
+		final Map<String, String> mergeMap = new HashMap<String, String>();
 
 		try {
-			Collection<File> inputFiles = FileUtils.listFiles(new File(
-					INPUT_DIR), FileFileFilter.FILE, null);
-			for (File input : inputFiles) {
-				List<String> inputLines = FileUtils.readLines(input);
-				mergeLines.addAll(inputLines);
-			}
+			this.readDataIntoMap(mergeMap);
+			this.readData2IntoMap(mergeMap);
+			FileUtils.writeLines(new File(OUTPUT), mergeMap.values());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-			Map<String, JSONObject> mapping = new HashMap<>();
-			for (String line : mergeLines) {
+	private void readDataIntoMap(Map<String, String> mergeMap)
+			throws IOException {
+		final Collection<File> inputFiles = FileUtils.listFiles(new File(
+				DATA_CSV), FileFileFilter.FILE, null);
+		for (final File input : inputFiles) {
+			final List<String> inputLines = FileUtils.readLines(input);
+			for (String line : inputLines) {
+				final String[] prop = StringUtils.splitPreserveAllTokens(line,
+						",");
+				final String ill = prop[0];
+				final String name = prop[1];
+				final String region = prop[3];
+				final String pref = prop[4];
+				final String type = prop[5];
+
+				String rarilites = prop[7];
+				rarilites = StringUtils.replace(rarilites, "SSレア", "SSR");
+				rarilites = StringUtils.replace(rarilites, "Sレア", "SR");
+				rarilites = StringUtils.replace(rarilites, "ハイレア", "HR");
+				rarilites = StringUtils.replace(rarilites, "レア", "R");
+				rarilites = StringUtils.replace(rarilites, "ハイノーマル", "HN");
+				rarilites = StringUtils.replace(rarilites, "ノーマル", "N");
+				rarilites = StringUtils.replace(rarilites, "スペシャル", "SP");
+
+				StringBuilder sb = new StringBuilder();
+				sb.append(name).append(",");
+				sb.append(region).append(",");
+				sb.append(pref).append(",");
+				sb.append(rarilites).append(",");
+				sb.append(type).append(",");
+				sb.append(ill).append(",");
+				sb.append(3);
+
+				mergeMap.put(name, sb.toString());
+			}
+		}
+	}
+
+	private void readData2IntoMap(Map<String, String> mergeMap)
+			throws IOException {
+		final Collection<File> inputFiles = FileUtils.listFiles(new File(
+				DATA2_CSV), FileFileFilter.FILE, null);
+
+		Map<String, String> regionMap = this.getRegionMap();
+		for (final File input : inputFiles) {
+			final List<String> inputLines = FileUtils.readLines(input);
+			for (String line : inputLines) {
 				String[] prop = StringUtils.splitPreserveAllTokens(line, ",");
-				String ill = prop[0];
+				String name = prop[3];
 				String pref = prop[1];
 				String region = regionMap.get(prop[1]);
 				String rarilites = prop[2];
-				String name = prop[3];
 				rarilites = StringUtils.replace(rarilites, "ssrare", "SSR");
 				rarilites = StringUtils.replace(rarilites, "srare", "SR");
 				rarilites = StringUtils.replace(rarilites, "hrare", "HR");
+				final String type = "";
+				String ill = prop[0];
 
-				JSONObject card = null;
-				if (mapping.containsKey(name)) {
-					card = mapping.get(name);
-					JSONArray illList = card.getJSONArray("ill");
-					illList.add(ill);
-				} else {
-					card = new JSONObject();
-					card.put("name", name);
-					card.put("rarilites", rarilites);
-					card.put("region", StringUtils.defaultIfBlank(region, "不明"));
-					card.put("pref", StringUtils.defaultIfBlank(pref, "不明"));
-					card.put("type", "不明");
+				StringBuilder sb = new StringBuilder();
+				sb.append(name).append(",");
+				sb.append(region).append(",");
+				sb.append(pref).append(",");
+				sb.append(rarilites).append(",");
+				sb.append(type).append(",");
+				sb.append(ill).append(",");
+				sb.append(3);
 
-					JSONArray illList = new JSONArray();
-					illList.add(ill);
-					card.put("ill", illList);
-
-					mapping.put(name, card);
-				}
+				mergeMap.put(name, sb.toString());
 			}
-
-			JSONArray outputList = new JSONArray();
-			outputList.addAll(mapping.values());
-
-			FileUtils.write(new File(OUTPUT),
-					"var cards = " + outputList.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-
-		System.out.printf("%s end\n", this.getClass().getSimpleName());
 	}
 
 	private Map<String, String> getRegionMap() {

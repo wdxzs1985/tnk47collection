@@ -1,0 +1,6 @@
+AS_USER_CHECK=0; Domain=tnk47.ameba.jp; Path=/; Expires=1386834073000; Version=0; Secure=false
+N=b0c68dbda989dfe5d043e52b08b1051db94039a75bb095e8efcc6ee4332a56a5f5ce4fbb54f5c51f746a3fe8becce5b093714c95d701c4dfcbe3bcc5f4c343ac4f8a6bddf0b97613e87f387eeaad6d62; Domain=.ameba.jp; Path=/; Expires=1394005274000; Version=0; Secure=false
+P=211.9.58.206.1386229273387905; Domain=.ameba.jp; Path=/; Expires=1449301273000; Version=0; Secure=false
+asauth=98079543d429a9c5f2c889ea24567fecbe4142de3171b1a6bdbc0fea78e047df; Domain=.user.ameba.jp; Path=/; Expires=1394005274000; Version=0; Secure=false
+gameAuthId=e1RoLezJuMrwQVohLVZrXz1u6sIGMlPpVXIfOd6nY9QxNsnyItzqFL8O77KSO3WkLHDtwXKpdK2VmrF2Jcuar0wIYfi3JjvWJPZG; Domain=.tnk47.ameba.jp; Path=/; Expires=1387438874000; Version=0; Secure=false
+redirect_check=1; Domain=tnk47.ameba.jp; Path=/; Expires=1386229334000; Version=0; Secure=false
