@@ -194,12 +194,12 @@
 クリスマス棋士,北海道・東北,北海道・東北,SR,,ill_22311_kurisumasukishi01,3
 籠池の狐,近畿,大阪,R,不明,ill_12111_kagoikenokitsune01,3
 えびふりゃあちゃん,中部,愛知,N,飲食,ill_5401_ebihuryachan01,3
-雷神,無所属,無所属,SR,神秘,ill_5021_raijin01,3
+雷神,無所属,無所属,SR,神秘,ill_5021_raijin01,1
 日本舞踊,無所属,無所属,SSR,,ill_19561_nihombuyo01,3
 幸姫,北海道・東北,北海道・東北,HR,姫,ill_16101_yoshihime01,3
 トゥスクル,北海道・東北,北海道,HR,,ill_191_tolusukuru01,3
 筒井順慶,近畿,奈良,N,武人,ill_7081_tsutsuijunkei01,3
-夏目未央 ﾕｷｳｻｷﾞver,関東,東京,SR,名物,ill_17601_natsumemio_yukiusagi01,3
+夏目未央 ﾕｷｳｻｷﾞver,関東,東京,SR,名物,ill_17601_natsumemio_yukiusagi01,4
 キンマモン,九州・沖縄,九州・沖縄,SR,,ill_18041_kimmamon01,3
 お月見泥棒,無所属,無所属,R,名物,ill_7931_otsukimidorobou01,3
 ハチコウ,関東,東京,N,名物,ill_931_hachikou01,3
@@ -314,7 +314,7 @@
 【海開き】フグ刺しちゃん,中国・四国,中国・四国,HR,飲食,ill_16361_umibirakifugusashichan01,3
 藤原薬子,近畿,奈良,HR,姫,ill_6451_fujiwaranokusuko01,3
 桃酒ちゃん,中国・四国,中国・四国,HR,飲食,ill_13301_momoshu01,3
-彦星,無所属,無所属,SR,神秘,ill_16401_hikoboshi01,3
+彦星,無所属,無所属,SR,神秘,ill_16401_hikoboshi01,1
 博多人形,九州・沖縄,福岡,N,名物,ill_2301_hakataningyou01,3
 卯子酉様,北海道・東北,北海道・東北,SR,神秘,ill_3921_unedorisama01,3
 金森徳次郎,中部,中部,HR,知性派,ill_14061_kanamoritokujiro01,3
@@ -379,7 +379,7 @@
 はりきりお雑煮ちゃん,近畿,近畿,R,お雑煮,ill_9143_kinkinoozounichan03,3
 神名火山,中国・四国,中国・四国,HR,,ill_20091_kannabiyama01,3
 オオクニヌシ,中国・四国,中国・四国,HR,神秘,ill_5311_okuninushi01,3
-織姫,無所属,無所属,SR,神秘,ill_16391_orihime01,3
+織姫,無所属,無所属,SR,神秘,ill_16391_orihime01,1
 雨おんば,中部,中部,HR,妖怪,ill_14511_ameomba01,3
 広島風お好み焼きちゃん,中国・四国,広島,N,飲食,ill_3981_hiroshimahuokonomiyakichan01,3
 ウグイス,無所属,無所属,HR,名物,ill_16601_uguisu01,3
@@ -535,7 +535,7 @@
 ヤサカトメノカミ,中部,中部,HR,神秘,ill_13921_yasakatomenokami01,3
 真神,近畿,奈良,SR,神秘,ill_7711_makami01,3
 メロンちゃん,関東,茨城,N,飲食,ill_701_melonchan01,3
-【CM記念】江,無所属,無所属,SR,,ill_7771_cmgou01,5
+【CM記念】江,無所属,無所属,SR,,ill_7771_cmgou01,4
 しっぺい太郎,中部,静岡,N,伝承,ill_3901_shippeitarou01,3
 はっさくちゃん,近畿,近畿,SR,,ill_18411_hassakuchan01,3
 八上姫,中国・四国,鳥取,N,伝承,ill_4591_yagamihime01,3
@@ -645,11 +645,11 @@
 【聖夜】稲佐山さん,九州・沖縄,九州・沖縄,HR,,ill_20451_seiyainasayamasan01,3
 銀の招き雀,特殊素材,特殊素材,R,,ill_100002_manekisuzume02,3
 深川祭,関東,関東,SR,名物,ill_10561_fukagawamatsuri01,3
-風神,無所属,無所属,SR,神秘,ill_5031_fujin01,3
+風神,無所属,無所属,SR,神秘,ill_5031_fujin01,1
 福地桜智,九州・沖縄,長崎,R,知性派,ill_9891_hukuchiouchi01,3
 高杉晋作,中国・四国,山口,N,武人,ill_2181_takasugishinsaku01,3
 イワコシンプ,北海道・東北,北海道,R,神秘,ill_121_iwakoshinpu01,3
-イザナミ,無所属,無所属,SR,神秘,ill_14921_izanami01,3
+イザナミ,無所属,無所属,SR,神秘,ill_14921_izanami01,1
 竜田姫,無所属,無所属,HR,,ill_1771_tatsutahime01,3
 化灯籠,関東,関東,HR,伝承,ill_6651_baketoro01,3
 雨降り小僧,無所属,無所属,HR,妖怪,ill_10291_amefurikozo01,3
@@ -660,7 +660,7 @@
 貝児,無所属,無所属,HR,妖怪,ill_11431_kaichigo01,3
 カグヤ,無所属,無所属,SR,伝承,ill_1541_kaguya01,3
 板垣信方,中部,山梨,R,武人,ill_6871_itagakinobukata01,3
-イザナギ,無所属,無所属,SR,神秘,ill_14911_izanagi01,3
+イザナギ,無所属,無所属,SR,神秘,ill_14911_izanagi01,1
 餃子ちゃん,関東,栃木,N,飲食,ill_6361_gyouzachan01,3
 火消し,無所属,無所属,R,名物,ill_911_hikeshi01,3
 タケミカヅチ,関東,関東,HR,神秘,ill_13901_takemikazuchi01,3
@@ -692,7 +692,7 @@
 干支 蛇,無所属,無所属,SR,不明,ill_8561_etohebi01,3
 ポインセチアちゃん,九州・沖縄,九州・沖縄,SR,,ill_20501_poinsechiachan01,3
 浜名湖ちゃん,中部,中部,HR,,ill_18551_hamanakochan01,3
-イザナギ・イザナミ,無所属,無所属,SR,神秘,ill_2881_izanagi_izanami01,3
+イザナギ・イザナミ,無所属,無所属,SR,神秘,ill_2881_izanagi_izanami01,1
 吉田の火祭り,中部,中部,HR,名物,ill_10661_yoshidanohimatsuri01,3
 ダルマ,関東,群馬,N,名物,ill_621_daruma01,3
 吉川夫人,中国・四国,中国・四国,HR,姫,ill_14381_kikkawafujin01,3
@@ -735,7 +735,7 @@ F１レーサー,近畿,三重,N,名物,/images/ill_7721_f1racer01.jpg?135747665
 福島正則,中国・四国,広島,R,武人,ill_4371_hukushimamasanori01,3
 【アナウンサー】前田有紀,関東,神奈川,HR,神秘,ill_14981_maedayuki_announcer01,3
 三村鶴,中国・四国,中国・四国,HR,姫,ill_9581_mimuratsuru01,3
-椎名心実 フグ刺しver,無所属,無所属,SR,飲食,ill_14374_shiinakokomi04,5
+椎名心実 フグ刺しver,無所属,無所属,SR,飲食,ill_14374_shiinakokomi04,4
 ゴマフアザラシちゃん,北海道・東北,北海道・東北,HR,名物,ill_16881_gomafuazarashichan01,3
 木霊,無所属,無所属,R,神秘,ill_533_kodama03,7
 フジバカマ,中部,中部,HR,,ill_17831_fujibakama01,3
