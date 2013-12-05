@@ -2,6 +2,8 @@ package tnk47collection;
 
 import java.io.File;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -11,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class MakeJSON implements Runnable {
 
+	public static final Pattern ILL_PATTERN = Pattern
+			.compile("ill_(\\d+)\\d_(.*?)0\\d");
 	public static final String INPUT = "card.csv";
 	public static final String OUTPUT = "card.json";
 
@@ -23,8 +27,8 @@ public class MakeJSON implements Runnable {
 		System.out.printf("%s start\n", this.getClass().getSimpleName());
 
 		try {
-			final List<String> mergeLines = FileUtils.readLines(new File(
-					"card.csv"));
+			final List<String> mergeLines = FileUtils
+					.readLines(new File(INPUT));
 
 			final JSONArray outputList = new JSONArray();
 			for (final String line : mergeLines) {
@@ -47,12 +51,17 @@ public class MakeJSON implements Runnable {
 
 				if (StringUtils.isNotBlank(ill)) {
 					JSONArray illList = new JSONArray();
-					for (int i = 1; i <= evo; i++) {
-						StringBuilder illBuilder = new StringBuilder(ill);
-						illBuilder.deleteCharAt(ill.length() - 1).append(i);
-						illList.add(illBuilder.toString());
+					Matcher illMatcher = ILL_PATTERN.matcher(ill);
+					if (illMatcher.find()) {
+						String number = illMatcher.group(1);
+						String roma = illMatcher.group(2);
+						for (int i = 1; i <= evo; i++) {
+							illList.add(String.format("ill_%s%d_%s0%d", number,
+									i, roma, i));
+						}
+						card.put("ill", illList);
 					}
-					card.put("ill", illList);
+
 				}
 				outputList.add(card);
 			}
