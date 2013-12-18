@@ -1,9 +1,5 @@
-package tnk47collection;
+package tnk47collection.work;
 
-import tnk47collection.work.DownloadHTML;
-import tnk47collection.work.MakeCSV;
-import tnk47collection.work.MakeJSON;
-import tnk47collection.work.MakeRawText;
 
 public class Application {
 
