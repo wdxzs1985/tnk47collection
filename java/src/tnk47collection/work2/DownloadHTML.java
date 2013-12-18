@@ -23,7 +23,8 @@ public class DownloadHTML implements Runnable {
 	private final File cookie = new File("cookie");
 
 	public static void main(String[] args) {
-		DownloadHTML worker = new DownloadHTML(8000, 8100);
+		// 2013/12/18 last:8720
+		DownloadHTML worker = new DownloadHTML(8700, 8800);
 		worker.run();
 	}
 
