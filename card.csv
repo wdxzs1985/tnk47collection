@@ -1,10 +1,10 @@
-浄法寺椀,北海道・東北,岩手,HR,名物,ill_100301_jouhoujiwann01,3
-【満開】桜のタマゴ,無所属,無所属,HR,,ill_100281_mankaisakuranotamago01,3
-秘伝のスープ,無所属,無所属,HR,飲食,ill_100261_hidennosu-pu01,3
-お年玉招き雀,特殊素材,特殊素材,R,,ill_100221_otoshidamamanekisuzume01,3
-大吉鏡もち,無所属,無所属,HR,飲食,ill_100211_dreamkagamimochi01,3
-中吉鏡もち,無所属,無所属,R,飲食,ill_100201_normalkagamimochi01,3
-虹色のタマゴ,無所属,無所属,HR,神秘,ill_100101_nijiironotamago01,3
+浄法寺椀,北海道・東北,岩手,HR,名物,ill_100301_jouhoujiwann01,2
+【満開】桜のタマゴ,無所属,無所属,HR,,ill_100281_mankaisakuranotamago01,2
+秘伝のスープ,無所属,無所属,HR,飲食,ill_100261_hidennosu-pu01,2
+お年玉招き雀,特殊素材,特殊素材,R,,ill_100221_otoshidamamanekisuzume01,2
+大吉鏡もち,無所属,無所属,HR,飲食,ill_100211_dreamkagamimochi01,2
+中吉鏡もち,無所属,無所属,R,飲食,ill_100201_normalkagamimochi01,2
+虹色のタマゴ,無所属,無所属,HR,神秘,ill_100101_nijiironotamago01,2
 豪華成長だんご,特殊素材,特殊素材,HR,,ill_100013_seichoudango03,3
 大盛り成長だんご,特殊素材,特殊素材,R,,ill_100012_seichoudango02,3
 成長だんご,特殊素材,特殊素材,N,,ill_100011_seichoudango01,3
@@ -61,7 +61,7 @@
 キムンカムイ,北海道・東北,北海道・東北,HR,神秘,ill_20073_kimunkamui03,3
 極楽温鶏,九州・沖縄,九州・沖縄,SR,飲食,ill_20063_gokurakuonkei03,3
 愛宕権現,近畿,近畿,SR,神秘,ill_20053_atagogongen03,3
-【美麗】吉田くん,中国・四国,島根,special,名物,ill_19961_yoshidakun01,3
+【美麗】吉田くん,中国・四国,島根,SP,名物,ill_19961_yoshidakun01,1
 伴信友,中部,中部,HR,知性派,ill_19923_motorinorinaga03,3
 岡本天明,中国・四国,中国・四国,SR,知性派,ill_19903_okamototemmei03,3
 ツクモガミ,無所属,無所属,SSR,神秘,ill_19883_tsukumogami03,3
@@ -74,8 +74,8 @@
 荒神,中国・四国,中国・四国,HR,伝承,ill_19773_kojin03,3
 ヘビガミ,近畿,近畿,SR,伝承,ill_19733_hebigami03,3
 アマツミカボシ,無所属,無所属,SSR,神秘,ill_19723_amatsukamiboshi03,3
-【熱海温泉】茶摘み娘,中部,静岡,rare,飲食,ill_19713_atamionsenchatsumi03,3
-【伊香保温泉】空っ風,関東,群馬,rare,名物,ill_19703_ikahonsenkarakkaze03,3
+【熱海温泉】茶摘み娘,中部,静岡,R,飲食,ill_19713_atamionsenchatsumi03,3
+【伊香保温泉】空っ風,関東,群馬,R,名物,ill_19703_ikahonsenkarakkaze03,3
 【層雲峡温泉】エゾシカちゃん,北海道・東北,北海道・東北,HR,名物,ill_19693_sounkyoonsenezoshika03,3
 【別府温泉】海地獄ちゃん,九州・沖縄,九州・沖縄,HR,名物,ill_19683_beppuonsenumijigoku03,3
 【嵐山温泉】紫式部,近畿,近畿,HR,知性派,ill_19673_arashiyamaonsenmurasakishikibu03,3
@@ -192,8 +192,8 @@
 山神様,無所属,無所属,SSR,神秘,ill_17643_yamagamisama03,3
 クビワコウモリちゃん,中部,中部,SR,名物,ill_17621_kubiwakomorichan01,3
 夏目未央 ﾕｷｳｻｷﾞver,関東,東京,SR,名物,ill_17601_natsumemio_yukiusagi01,4
-みやざき犬（宮崎牛ver）,九州・沖縄,宮崎,special,名物,ill_17571_miyazakikemmiyazakiushiver01,3
-みやざき犬,九州・沖縄,宮崎,special,名物,ill_17561_miyazakiken01,3
+みやざき犬（宮崎牛ver）,九州・沖縄,宮崎,SP,名物,ill_17571_miyazakikemmiyazakiushiver01,1
+みやざき犬,九州・沖縄,宮崎,SP,名物,ill_17561_miyazakiken01,3
 みやざき萌実ちゃん,九州・沖縄,宮崎,SR,名物,ill_17551_miyazakimoemichan01,3
 【１周年】ビードロ細工ちゃん,九州・沖縄,九州・沖縄,SR,名物,ill_17543_isshunenbiidorozaikuchan03,3
 【１周年】アマノウズメ,九州・沖縄,九州・沖縄,HR,神秘,ill_17523_isshunenamanozume03,3
@@ -212,7 +212,7 @@
 【１周年】こいのぼりちゃん,関東,関東,HR,,ill_17291_koinoborichanisshunen01,3
 【１周年】辛口日本酒ちゃん,北海道・東北,北海道・東北,SR,,ill_17281_karakuchinihonshu01,3
 【１周年】ツクヨミ,無所属,無所属,SSR,神秘,ill_17261_tsukuyomiisshunen01,3
-野上慎平アナ,中国・四国,岡山,rare,名物,ill_17251_nogamishimpeiana01,3
+野上慎平アナ,中国・四国,岡山,R,名物,ill_17251_nogamishimpeiana01,3
 飯塚高史,北海道・東北,北海道,HR,武人,ill_17241_iizukatakashi01,3
 4代目タイガーマスク,無所属,無所属,HR,武人,ill_17231_yondaimetaigamasuku01,3
 中邑真輔,近畿,京都,SR,武人,ill_17221_nakamurashinsuke01,3
@@ -229,7 +229,7 @@
 奥入瀬渓流,北海道・東北,北海道・東北,HR,名物,ill_16981_oirasekeiryu01,3
 金魚ちゃん,無所属,無所属,SSR,名物,ill_16971_kingyochan01,3
 サンゴちゃん,無所属,無所属,SSR,名物,ill_16921_sangochan01,3
-紗栄子 ｱﾏﾉｳｽﾞﾒver,九州・沖縄,宮崎,special,神秘,ill_16911_saekoamanouzume01,3
+紗栄子 ｱﾏﾉｳｽﾞﾒver,九州・沖縄,宮崎,SP,神秘,ill_16911_saekoamanouzume01,1
 クマノミちゃん,九州・沖縄,九州・沖縄,SR,名物,ill_16901_kumanomichan01,3
 ゴマフアザラシちゃん,北海道・東北,北海道・東北,HR,名物,ill_16881_gomafuazarashichan01,3
 タツノオトシゴちゃん,中部,中部,SR,名物,ill_16871_tatsunotoshigochan01,3
@@ -276,7 +276,7 @@
 神楽車,中部,中部,HR,名物,ill_16261_kaguraguruma01,3
 大祭牛鬼,無所属,無所属,SSR,名物,ill_16241_taisaiushioni01,3
 笠鉾ちゃん,関東,関東,SR,名物,ill_16231_kasabokochan01,3
-椎名慶治,関東,東京,special,,ill_16221_shiinayoshiharu01,3
+椎名慶治,関東,東京,SP,,ill_16221_shiinayoshiharu01,1
 九頭竜,関東,関東,SR,神秘,ill_16121_kuzuryu01,3
 幸姫,北海道・東北,北海道・東北,HR,姫,ill_16101_yoshihime01,3
 円融院,中国・四国,中国・四国,SR,姫,ill_16091_enyuin01,3
@@ -296,7 +296,7 @@
 ジーンズちゃん,中国・四国,岡山,HR,名物,ill_15871_jeanschan01,3
 万年筆ちゃん,関東,神奈川,HR,名物,ill_15841_mannenhitsuchan01,3
 菊間瓦ちゃん,中国・四国,中国・四国,SR,名物,ill_15811_kikumakawara01,3
-坂本乙女,中国・四国,高知,rare,武人,ill_15803_sakamototome03,3
+坂本乙女,中国・四国,高知,R,武人,ill_15803_sakamototome03,3
 【播州】お菊,近畿,近畿,HR,伝承,ill_15793_banshu_okiku03,3
 赤井輝子,関東,関東,HR,武人,ill_15771_akaiteruko01,3
 中野竹子,北海道・東北,北海道・東北,HR,武人,ill_15751_nakanotakeko01,3
@@ -375,7 +375,7 @@
 【崇源院】江,無所属,無所属,SSR,姫,ill_13981_sugenin_go01,3
 八幡神,九州・沖縄,九州・沖縄,HR,神秘,ill_13961_yahatanokami01,3
 住吉大神,近畿,近畿,SR,神秘,ill_13941_sumiyoshitaishin01,3
-神使・兎,近畿,大阪,rare,神秘,ill_13933_shinshiusagi03,3
+神使・兎,近畿,大阪,R,神秘,ill_13933_shinshiusagi03,3
 ヤサカトメノカミ,中部,中部,HR,神秘,ill_13921_yasakatomenokami01,3
 タケミカヅチ,関東,関東,HR,神秘,ill_13901_takemikazuchi01,3
 五月人形,無所属,無所属,SR,名物,ill_13821_gogatsuningyou01,3
@@ -435,14 +435,14 @@
 郡山うねめまつり,北海道・東北,北海道・東北,HR,名物,ill_10481_koriyamaunemematsuri01,3
 盛岡さんさ踊り,北海道・東北,岩手,HR,名物,ill_10411_moriokasansaodori01,3
 首切れ馬,中国・四国,徳島,R,妖怪,ill_10321_kubikireuma01,3
-横浜セーラーちゃん,関東,神奈川,rare,名物,ill_10311_yokohamaserachan01,3
+横浜セーラーちゃん,関東,神奈川,R,名物,ill_10311_yokohamaserachan01,3
 雨降り小僧,無所属,無所属,HR,妖怪,ill_10291_amefurikozo01,3
 文車妖妃,無所属,無所属,SR,伝承,ill_10281_fugurumayoubi01,3
 糸引き娘,中国・四国,中国・四国,HR,,ill_10191_itohikimusume01,3
 天邪鬼,中国・四国,広島,HR,妖怪,ill_10171_amanojyaku01,3
 赤しゃぐま,中国・四国,中国・四国,R,妖怪,ill_10161_akashaguma01,3
 シラスちゃん,関東,関東,HR,名物,ill_10141_shirasuchan01,3
-山姫,九州・沖縄,宮崎,rare,妖怪,ill_10091_yamahime01,3
+山姫,九州・沖縄,宮崎,R,妖怪,ill_10091_yamahime01,3
 否哉,北海道・東北,宮城,HR,妖怪,ill_10081_iyaya01,3
 ナキサワメ,近畿,奈良,R,神秘,ill_10041_nakisawame01,3
 狒々,中部,中部,HR,妖怪,ill_9971_hihi01,3
@@ -488,7 +488,7 @@
 招き猫,関東,東京,R,名物,ill_9081_manekineko01,3
 神主様,無所属,無所属,HR,不明,ill_9071_kannushisama01,3
 巫女様,無所属,無所属,HR,名物,ill_9061_mikosama01,3
-トナカイ,無所属,無所属,rare,名物,ill_9041_tonakai01,3
+トナカイ,無所属,無所属,R,名物,ill_9041_tonakai01,3
 アフロディテ,無所属,無所属,SR,神秘,ill_9021_aphrodite01,3
 アレス,無所属,無所属,SR,不明,ill_9011_areus01,3
 イヴと蛇,無所属,無所属,SR,神秘,ill_9001_ibutohebi01,3
@@ -507,9 +507,9 @@
 竜化の滝,関東,関東,HR,名物,ill_8601_ryukanotaki01,3
 茨木童子,近畿,京都,HR,妖怪,ill_8591_ibarakidouji01,3
 干支 蛇,無所属,無所属,SR,不明,ill_8561_etohebi01,3
-猫又,中部,新潟,rare,妖怪,ill_8451_nekomata01,3
+猫又,中部,新潟,R,妖怪,ill_8451_nekomata01,3
 祭りオコジョ,無所属,無所属,HR,名物,ill_8441_matsuriokojo01,3
-提灯お化け,北海道・東北,山形,rare,妖怪,ill_8403_chochinobake03,3
+提灯お化け,北海道・東北,山形,R,妖怪,ill_8403_chochinobake03,3
 和泉式部,近畿,近畿,HR,知性派,ill_8373_izumishikibu03,3
 【CM記念】お市の方,無所属,無所属,SR,姫,ill_8361_cmoichinokata01,3
 小田氏治,関東,茨城,R,武人,ill_8341_odaujiharu01,3
@@ -841,7 +841,7 @@ F１レーサー,近畿,三重,N,名物,/images/ill_7721_f1racer01.jpg?135747665
 亀姫,北海道・東北,福島,N,妖怪,ill_431_kamehime01,3
 アカベコちゃん,北海道・東北,福島,N,名物,ill_421_akabekochan01,3
 ずんだ餅ちゃん,北海道・東北,宮城,N,飲食,ill_411_zundamochichan01,3
-前田慶次,北海道・東北,北海道・東北,rare,武人,ill_391_maedakeiji01,3
+前田慶次,北海道・東北,北海道・東北,R,武人,ill_391_maedakeiji01,3
 直江兼続,北海道・東北,山形,R,武人,ill_381_naoekanetsugu01,3
 影女,北海道・東北,北海道・東北,HR,妖怪,ill_371_kageonna01,3
 棋士,北海道・東北,山形,N,知性派,ill_361_kishi01,3

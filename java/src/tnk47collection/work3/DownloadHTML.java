@@ -64,6 +64,8 @@ public class DownloadHTML implements Runnable {
                 rarityCode = StringUtils.replace(rarityCode, "ssrare", "SSR");
                 rarityCode = StringUtils.replace(rarityCode, "srare", "SR");
                 rarityCode = StringUtils.replace(rarityCode, "hrare", "HR");
+                rarityCode = StringUtils.replace(rarityCode, "rare", "R");
+                rarityCode = StringUtils.replace(rarityCode, "special", "SP");
 
                 final StringBuilder sb = new StringBuilder();
                 sb.append(name).append(",");

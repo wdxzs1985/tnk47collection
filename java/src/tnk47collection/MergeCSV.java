@@ -178,7 +178,13 @@ public class MergeCSV implements Runnable {
                                                                          ",");
                 final String name = prop[0];
                 if (!mergeMap.containsKey(name)) {
-                    mergeMap.put(name, line);
+                    String line2 = line;
+                    line2 = StringUtils.replace(line2, "ssrare", "SSR");
+                    line2 = StringUtils.replace(line2, "srare", "SR");
+                    line2 = StringUtils.replace(line2, "hrare", "HR");
+                    line2 = StringUtils.replace(line2, "rare", "R");
+                    line2 = StringUtils.replace(line2, "special", "SP");
+                    mergeMap.put(name, line2);
                 }
             }
         }
