@@ -25,6 +25,7 @@ public class MergeCSV implements Runnable {
     public static final String PRE_CSV = "pre.csv";
     public static final String DATA_CSV = "data/step3";
     public static final String DATA2_CSV = "data2/step3";
+    public static final String DATA3_CSV = "data3/step2";
     public static final String OUTPUT = "card.csv";
 
     private static final Pattern ILL_PATTERN = Pattern.compile("ill_(\\d+)_.*");
@@ -36,6 +37,7 @@ public class MergeCSV implements Runnable {
         try {
             this.readPreDataIntoMap(mergeMap);
             this.readDataIntoMap(mergeMap);
+            this.readData3IntoMap(mergeMap);
             this.readData2IntoMap(mergeMap);
 
             final List<String> sortList = new ArrayList<String>();
@@ -63,7 +65,6 @@ public class MergeCSV implements Runnable {
                 }
             };
             Collections.sort(sortList, c);
-
             FileUtils.writeLines(new File(MergeCSV.OUTPUT), sortList);
         } catch (final IOException e) {
             e.printStackTrace();
@@ -158,6 +159,26 @@ public class MergeCSV implements Runnable {
                     if (!mergeMap.containsKey(name)) {
                         mergeMap.put(name, sb.toString());
                     }
+                }
+            }
+        }
+    }
+
+    private void readData3IntoMap(final Map<String, String> mergeMap)
+            throws IOException {
+        final Collection<File> inputFiles = FileUtils.listFiles(new File(MergeCSV.DATA3_CSV),
+                                                                FileFileFilter.FILE,
+                                                                null);
+
+        this.getRegionMap();
+        for (final File input : inputFiles) {
+            final List<String> inputLines = FileUtils.readLines(input);
+            for (final String line : inputLines) {
+                final String[] prop = StringUtils.splitPreserveAllTokens(line,
+                                                                         ",");
+                final String name = prop[0];
+                if (!mergeMap.containsKey(name)) {
+                    mergeMap.put(name, line);
                 }
             }
         }

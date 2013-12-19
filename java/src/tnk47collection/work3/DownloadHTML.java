@@ -2,9 +2,13 @@ package tnk47collection.work3;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +17,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.http.message.BasicNameValuePair;
 
 import common.CommonHttpClient;
-import common.SystemConstants;
 
 public class DownloadHTML implements Runnable {
     private final CommonHttpClient httpClient = new CommonHttpClient();
@@ -22,8 +25,10 @@ public class DownloadHTML implements Runnable {
     private final Log log = LogFactory.getLog(DownloadHTML.class);
     private final File cookie = new File("cookie");
 
+    private final Pattern cardPattern = Pattern.compile("<option value=\"(.*?)\"data-image-path=\"/illustrations/card/(ill_\\d+_.*?0\\d).jpg\\?[\\d]{8}-\\d\"data-rarity-code=\"([a-z]+)\"data-region-code=\"[a-z]+\"data-region-name=\"(.*?)\"data-pref-name=\"(.*?)\"data-max-attack=\"\\d+\"data-max-defence=\"\\d+\"data-max-cost=\"\\d+\"data-min-cost=\"\\d+\"data-card-type=\"(.*?)\"data-skill-name=\".*?\"data-skill-description=\".*?\"data-effect-class=\".*?\">.*?</option>");
+
     public static void main(final String[] args) {
-        final DownloadHTML worker = new DownloadHTML(80, 800);
+        final DownloadHTML worker = new DownloadHTML(1, 811);
         worker.run();
     }
 
@@ -43,24 +48,51 @@ public class DownloadHTML implements Runnable {
             }
         }
         this.httpGet("/mypage");
+
         for (int i = this.start; i <= this.end; i++) {
+            final List<String> list = new ArrayList<String>();
             final String html = this.httpGet(String.format("/information?informationId=%d",
                                                            i));
-            final String output = String.format("data3/step1/%d.html", i);
-            if (!StringUtils.contains(html, "ページが表示できませんでした。ごめんなさい。")) {
+            final Matcher matcher = this.cardPattern.matcher(html);
+            while (matcher.find()) {
+                final String name = matcher.group(1);
+                final String ill = matcher.group(2);
+                String rarityCode = matcher.group(3);
+                final String region = matcher.group(4);
+                final String pref = matcher.group(5);
+                final String type = matcher.group(6);
+                rarityCode = StringUtils.replace(rarityCode, "ssrare", "SSR");
+                rarityCode = StringUtils.replace(rarityCode, "srare", "SR");
+                rarityCode = StringUtils.replace(rarityCode, "hrare", "HR");
+
+                final StringBuilder sb = new StringBuilder();
+                sb.append(name).append(",");
+                sb.append(region).append(",");
+                sb.append(pref).append(",");
+                sb.append(rarityCode).append(",");
+                sb.append(type).append(",");
+                sb.append(ill).append(",");
+                sb.append(3);
+
+                list.add(sb.toString());
+            }
+
+            if (CollectionUtils.isNotEmpty(list)) {
+                final String output = String.format("data3/step2/%d.csv", i);
                 try {
-                    final File file = new File(output);
-                    FileUtils.write(file, html, SystemConstants.ENCODING);
+                    FileUtils.writeLines(new File(output), list);
                 } catch (final IOException e) {
-                    this.log.error(e.getMessage(), e);
+                    e.printStackTrace();
                 }
             }
+
             try {
                 final int sleepTime = 1000 + RandomUtils.nextInt(1000);
                 Thread.sleep(sleepTime);
             } catch (final InterruptedException e) {
             }
         }
+
         this.httpClient.saveCookie(this.cookie);
     }
 
