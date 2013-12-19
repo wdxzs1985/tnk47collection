@@ -202,6 +202,7 @@ $(function(){
 <script type="text/x-tmpl" id="tmpl-listbody-item">
 {% for (var i=0; i<o.render.length; i++) { %}
 <li class="media">
+    {% if (o.render[i].ill) { %}
     <div class="pull-right">
         {% for (var j=0; j<o.render[i].ill.length; j++) { %}
         {% if (o.render[i].ill[j] != '') { %}
@@ -211,6 +212,7 @@ $(function(){
         {% } %}
         {% } %}
     </div>
+    {% } %}
     <div class="media-body">
         <h4 class="media-heading">{%=o.render[i].name%}<small>{%=o.render[i].kana%}</small></h4>
         <p>
