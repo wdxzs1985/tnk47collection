@@ -1,4 +1,4 @@
-package tnk47collection.work2;
+package tnk47collection.work3;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +23,7 @@ public class DownloadHTML implements Runnable {
     private final File cookie = new File("cookie");
 
     public static void main(final String[] args) {
-        // 2013/12/18 last:8720
-        final DownloadHTML worker = new DownloadHTML(9050, 9150);
+        final DownloadHTML worker = new DownloadHTML(80, 800);
         worker.run();
     }
 
@@ -44,10 +43,10 @@ public class DownloadHTML implements Runnable {
             }
         }
         this.httpGet("/mypage");
-        for (int i = this.start; i <= this.end; i += 1) {
-            final String html = this.httpGet(String.format("/gacha/gacha-detail?gachaId=%d",
+        for (int i = this.start; i <= this.end; i++) {
+            final String html = this.httpGet(String.format("/information?informationId=%d",
                                                            i));
-            final String output = String.format("data2/step1/%d.html", i);
+            final String output = String.format("data3/step1/%d.html", i);
             if (!StringUtils.contains(html, "ページが表示できませんでした。ごめんなさい。")) {
                 try {
                     final File file = new File(output);
@@ -57,7 +56,7 @@ public class DownloadHTML implements Runnable {
                 }
             }
             try {
-                final int sleepTime = 1000 + RandomUtils.nextInt(2000);
+                final int sleepTime = 1000 + RandomUtils.nextInt(1000);
                 Thread.sleep(sleepTime);
             } catch (final InterruptedException e) {
             }
