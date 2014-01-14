@@ -36,6 +36,7 @@ public class MergeCSV implements Runnable {
 
         try {
             this.readPreDataIntoMap(mergeMap);
+            this.readLastDataIntoMap(mergeMap);
             this.readDataIntoMap(mergeMap);
             this.readData3IntoMap(mergeMap);
             this.readData2IntoMap(mergeMap);
@@ -71,8 +72,18 @@ public class MergeCSV implements Runnable {
         }
     }
 
-    private void readPreDataIntoMap(final Map<String, String> mergeMap)
-            throws IOException {
+    private void readLastDataIntoMap(Map<String, String> mergeMap) throws IOException {
+        final List<String> inputLines = FileUtils.readLines(new File(MergeCSV.OUTPUT));
+        for (final String line : inputLines) {
+            final String[] prop = StringUtils.splitPreserveAllTokens(line, ",");
+            final String name = prop[0];
+            if (!mergeMap.containsKey(name)) {
+                mergeMap.put(name, line);
+            }
+        }
+    }
+
+    private void readPreDataIntoMap(final Map<String, String> mergeMap) throws IOException {
         final List<String> inputLines = FileUtils.readLines(new File(MergeCSV.PRE_CSV));
         for (final String line : inputLines) {
             final String[] prop = StringUtils.splitPreserveAllTokens(line, ",");
@@ -83,8 +94,7 @@ public class MergeCSV implements Runnable {
         }
     }
 
-    private void readDataIntoMap(final Map<String, String> mergeMap)
-            throws IOException {
+    private void readDataIntoMap(final Map<String, String> mergeMap) throws IOException {
         final Collection<File> inputFiles = FileUtils.listFiles(new File(MergeCSV.DATA_CSV),
                                                                 FileFileFilter.FILE,
                                                                 null);
@@ -125,8 +135,7 @@ public class MergeCSV implements Runnable {
         }
     }
 
-    private void readData2IntoMap(final Map<String, String> mergeMap)
-            throws IOException {
+    private void readData2IntoMap(final Map<String, String> mergeMap) throws IOException {
         final Collection<File> inputFiles = FileUtils.listFiles(new File(MergeCSV.DATA2_CSV),
                                                                 FileFileFilter.FILE,
                                                                 null);
@@ -164,8 +173,7 @@ public class MergeCSV implements Runnable {
         }
     }
 
-    private void readData3IntoMap(final Map<String, String> mergeMap)
-            throws IOException {
+    private void readData3IntoMap(final Map<String, String> mergeMap) throws IOException {
         final Collection<File> inputFiles = FileUtils.listFiles(new File(MergeCSV.DATA3_CSV),
                                                                 FileFileFilter.FILE,
                                                                 null);
