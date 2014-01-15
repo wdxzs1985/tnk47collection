@@ -28,11 +28,11 @@ public class MergeCSV implements Runnable {
     public static final String DATA3_CSV = "data3/step2";
     public static final String OUTPUT = "card.csv";
 
-    private static final Pattern ILL_PATTERN = Pattern.compile("ill_(\\d+)_.*");
+    private static final Pattern ILL_PATTERN = Pattern.compile("ill_(\\d+)\\d_.*");
 
     @Override
     public void run() {
-        final Map<String, String> mergeMap = new HashMap<String, String>();
+        final Map<Integer, String> mergeMap = new HashMap<Integer, String>();
 
         try {
             this.readPreDataIntoMap(mergeMap);
@@ -43,26 +43,20 @@ public class MergeCSV implements Runnable {
 
             final List<String> sortList = new ArrayList<String>();
             sortList.addAll(mergeMap.values());
+            final Map<String, Integer> rarityMap = this.getRarityMap();
             final Comparator<String> c = new Comparator<String>() {
 
                 @Override
                 public int compare(final String o1, final String o2) {
-                    final String[] prop1 = StringUtils.splitPreserveAllTokens(o1,
-                                                                              ",");
-                    int n1 = 0;
-                    final Matcher m1 = MergeCSV.ILL_PATTERN.matcher(prop1[5]);
-                    if (m1.find()) {
-                        n1 = Integer.valueOf(m1.group(1));
-                    }
+                    return this.rank(o2) - this.rank(o1);
+                }
 
-                    final String[] prop2 = StringUtils.splitPreserveAllTokens(o2,
-                                                                              ",");
-                    int n2 = 0;
-                    final Matcher m2 = MergeCSV.ILL_PATTERN.matcher(prop2[5]);
-                    if (m2.find()) {
-                        n2 = Integer.valueOf(m2.group(1));
-                    }
-                    return n2 - n1;
+                private int rank(String o) {
+                    final String[] prop = StringUtils.splitPreserveAllTokens(o,
+                                                                             ",");
+                    int r = rarityMap.get(prop[3]);
+                    int n = MergeCSV.this.getIllNo(prop[5]);
+                    return r * 100000000 + n;
                 }
             };
             Collections.sort(sortList, c);
@@ -72,29 +66,38 @@ public class MergeCSV implements Runnable {
         }
     }
 
-    private void readLastDataIntoMap(Map<String, String> mergeMap) throws IOException {
+    protected int getIllNo(String ill) {
+        int illNo = 0;
+        final Matcher m = MergeCSV.ILL_PATTERN.matcher(ill);
+        if (m.find()) {
+            illNo = Integer.valueOf(m.group(1));
+        }
+        return illNo;
+    }
+
+    private void readLastDataIntoMap(Map<Integer, String> mergeMap) throws IOException {
         final List<String> inputLines = FileUtils.readLines(new File(MergeCSV.OUTPUT));
         for (final String line : inputLines) {
             final String[] prop = StringUtils.splitPreserveAllTokens(line, ",");
-            final String name = prop[0];
-            if (!mergeMap.containsKey(name)) {
-                mergeMap.put(name, line);
+            int illNo = this.getIllNo(prop[5]);
+            if (illNo > 0 && !mergeMap.containsKey(illNo)) {
+                mergeMap.put(illNo, line);
             }
         }
     }
 
-    private void readPreDataIntoMap(final Map<String, String> mergeMap) throws IOException {
+    private void readPreDataIntoMap(final Map<Integer, String> mergeMap) throws IOException {
         final List<String> inputLines = FileUtils.readLines(new File(MergeCSV.PRE_CSV));
         for (final String line : inputLines) {
             final String[] prop = StringUtils.splitPreserveAllTokens(line, ",");
-            final String name = prop[0];
-            if (!mergeMap.containsKey(name)) {
-                mergeMap.put(name, line);
+            int illNo = this.getIllNo(prop[5]);
+            if (illNo > 0 && !mergeMap.containsKey(illNo)) {
+                mergeMap.put(illNo, line);
             }
         }
     }
 
-    private void readDataIntoMap(final Map<String, String> mergeMap) throws IOException {
+    private void readDataIntoMap(final Map<Integer, String> mergeMap) throws IOException {
         final Collection<File> inputFiles = FileUtils.listFiles(new File(MergeCSV.DATA_CSV),
                                                                 FileFileFilter.FILE,
                                                                 null);
@@ -103,9 +106,10 @@ public class MergeCSV implements Runnable {
             for (final String line : inputLines) {
                 final String[] prop = StringUtils.splitPreserveAllTokens(line,
                                                                          ",");
-                final String name = prop[1];
-                if (!mergeMap.containsKey(name)) {
-                    final String ill = prop[0];
+                final String ill = prop[0];
+                int illNo = this.getIllNo(ill);
+                if (illNo > 0 && !mergeMap.containsKey(illNo)) {
+                    final String name = prop[1];
                     final String region = prop[3];
                     final String pref = prop[4];
                     final String type = prop[5];
@@ -127,15 +131,13 @@ public class MergeCSV implements Runnable {
                     sb.append(type).append(",");
                     sb.append(ill).append(",");
                     sb.append(3);
-                    if (!mergeMap.containsKey(name)) {
-                        mergeMap.put(name, sb.toString());
-                    }
+                    mergeMap.put(illNo, sb.toString());
                 }
             }
         }
     }
 
-    private void readData2IntoMap(final Map<String, String> mergeMap) throws IOException {
+    private void readData2IntoMap(final Map<Integer, String> mergeMap) throws IOException {
         final Collection<File> inputFiles = FileUtils.listFiles(new File(MergeCSV.DATA2_CSV),
                                                                 FileFileFilter.FILE,
                                                                 null);
@@ -146,16 +148,17 @@ public class MergeCSV implements Runnable {
             for (final String line : inputLines) {
                 final String[] prop = StringUtils.splitPreserveAllTokens(line,
                                                                          ",");
-                final String name = prop[3];
-                if (!mergeMap.containsKey(name)) {
+                final String ill = prop[0];
+                int illNo = this.getIllNo(ill);
+                if (illNo > 0 && !mergeMap.containsKey(illNo)) {
                     final String pref = prop[1];
                     final String region = regionMap.get(prop[1]);
                     String rarilites = prop[2];
+                    final String name = prop[3];
                     rarilites = StringUtils.replace(rarilites, "ssrare", "SSR");
                     rarilites = StringUtils.replace(rarilites, "srare", "SR");
                     rarilites = StringUtils.replace(rarilites, "hrare", "HR");
                     final String type = "";
-                    final String ill = prop[0];
 
                     final StringBuilder sb = new StringBuilder();
                     sb.append(name).append(",");
@@ -165,37 +168,46 @@ public class MergeCSV implements Runnable {
                     sb.append(type).append(",");
                     sb.append(ill).append(",");
                     sb.append(3);
-                    if (!mergeMap.containsKey(name)) {
-                        mergeMap.put(name, sb.toString());
-                    }
+
+                    mergeMap.put(illNo, sb.toString());
                 }
             }
         }
     }
 
-    private void readData3IntoMap(final Map<String, String> mergeMap) throws IOException {
+    private void readData3IntoMap(final Map<Integer, String> mergeMap) throws IOException {
         final Collection<File> inputFiles = FileUtils.listFiles(new File(MergeCSV.DATA3_CSV),
                                                                 FileFileFilter.FILE,
                                                                 null);
-
-        this.getRegionMap();
         for (final File input : inputFiles) {
             final List<String> inputLines = FileUtils.readLines(input);
             for (final String line : inputLines) {
                 final String[] prop = StringUtils.splitPreserveAllTokens(line,
                                                                          ",");
-                final String name = prop[0];
-                if (!mergeMap.containsKey(name)) {
+                int illNo = this.getIllNo(prop[0]);
+                if (illNo > 0 && !mergeMap.containsKey(illNo)) {
                     String line2 = line;
                     line2 = StringUtils.replace(line2, "ssrare", "SSR");
                     line2 = StringUtils.replace(line2, "srare", "SR");
                     line2 = StringUtils.replace(line2, "hrare", "HR");
                     line2 = StringUtils.replace(line2, "rare", "R");
                     line2 = StringUtils.replace(line2, "special", "SP");
-                    mergeMap.put(name, line2);
+                    mergeMap.put(illNo, line2);
                 }
             }
         }
+    }
+
+    private Map<String, Integer> getRarityMap() {
+        final Map<String, Integer> rarityMap = new HashMap<String, Integer>();
+        rarityMap.put("SSR", 7);
+        rarityMap.put("SR", 6);
+        rarityMap.put("HR", 5);
+        rarityMap.put("R", 4);
+        rarityMap.put("HN", 3);
+        rarityMap.put("N", 2);
+        rarityMap.put("SP", 1);
+        return rarityMap;
     }
 
     private Map<String, String> getRegionMap() {
