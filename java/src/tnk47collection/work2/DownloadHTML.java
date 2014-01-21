@@ -15,7 +15,7 @@ public class DownloadHTML extends HtmlWorker {
 
     public static void main(final String[] args) {
         // 2013/12/18 last:8720
-        final DownloadHTML worker = new DownloadHTML(10001, 10500);
+        final DownloadHTML worker = new DownloadHTML(10701, 10900);
         worker.run();
     }
 

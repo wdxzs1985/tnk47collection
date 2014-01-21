@@ -3,6 +3,8 @@
 天叢雲剣,無所属,無所属,SSR,神秘,ill_22023_amenomurakumonotsurugi03,3,1
 【成人式】桜餅ちゃん,無所属,無所属,SSR,飲食,ill_21863_seijinshikisakuramochichan03,3,1
 【元旦】アマテラス,無所属,無所属,SSR,神秘,ill_21783_furisodeamaterasu03,3,1
+オカミノカミ,無所属,無所属,SSR,,ill_21701_okaminokami01,3,1
+日本そばちゃん,無所属,無所属,SSR,,ill_21621_nihonsobachan01,3,1
 干支 午,無所属,無所属,SSR,神秘,ill_21343_yabusame03,3,1
 【巫女】濃姫,無所属,無所属,SSR,姫,ill_21263_mikonohime03,3,1
 【海のクリスマス】乙姫,無所属,無所属,SSR,伝承,ill_21113_uminokurisumasuotohime03,3,1
@@ -70,6 +72,10 @@
 【成人式】広島風お好み焼きちゃん,中国・四国,中国・四国,SR,飲食,ill_21873_seijinshikihiroshimafuokonomiyakichan03,3,1
 【初詣荒らし】たこ焼きちゃん,近畿,近畿,SR,飲食,ill_21803_furisodetakoyakichan03,3,1
 【新米】アキタコマチちゃん,北海道・東北,北海道・東北,SR,飲食,ill_21793_furisodeakitakomachichan03,3,1
+ヤマミサキ,中国・四国,中国・四国,SR,,ill_21771_yamamisaki01,3,1
+夜行さん,中国・四国,中国・四国,SR,,ill_21711_yagyosan01,3,1
+沖縄そばちゃん,九州・沖縄,九州・沖縄,SR,,ill_21641_okinawasobachan01,3,1
+小田巻うどんちゃん,近畿,近畿,SR,,ill_21631_odamakiudonchan01,3,1
 門松ちゃん,関東,関東,SR,名物,ill_21363_kadomatsuchan03,3,1
 【正月遊戯】かるたちゃん,九州・沖縄,九州・沖縄,SR,名物,ill_21353_karutachan03,3,1
 【巫女】フグ刺しちゃん,中国・四国,中国・四国,SR,飲食,ill_21283_mikofugusashichan03,3,1
@@ -79,6 +85,7 @@
 京扇子ちゃん,近畿,近畿,SR,名物,ill_21073_kyosensu03,3,1
 【いたずらサンタ】桃太郎,中国・四国,中国・四国,SR,伝承,ill_20913_xmasmomotarou03,3,1
 【クリスマス】紫式部,近畿,近畿,SR,知性派,ill_20903_xmasmurasakishikibu03,3,1
+【美戦士】立花誾千代,九州・沖縄,九州・沖縄,SR,姫,ill_20753_tachibanaginchiyo03,3,1
 【日本三大美人】小野小町,北海道・東北,北海道・東北,SR,,ill_20741_bijinononokomachi01,3,1
 越前蟹鍋ちゃん,中部,中部,SR,飲食,ill_20673_echizenganinabechan03,3,1
 鯛しゃぶちゃん,関東,関東,SR,飲食,ill_20663_taishabuchan03,3,1
@@ -256,6 +263,7 @@
 ヤマタノオロチ,中国・四国,中国・四国,SR,伝承,ill_6731_yamatanoorochi01,3,1
 妙音弁財天,関東,関東,SR,神秘,ill_6661_myououbenzaiten01,3,1
 アリス,無所属,無所属,SR,伝承,ill_6411_alis01,3,1
+つらら女,北海道・東北,北海道・東北,SR,,ill_5821_tsuraraonna01,3,1
 きりたんぽちゃん,北海道・東北,北海道・東北,SR,,ill_5701_kiritampochan01,3,1
 ういろうさん,中部,中部,SR,,ill_5331_uirosan01,3,1
 神武天皇,無所属,無所属,SR,偉人,ill_5221_jinmutennou01,3,1
@@ -300,6 +308,11 @@
 【振袖】ムィティチゴロ,九州・沖縄,九州・沖縄,HR,妖怪,ill_21833_furisodemuteichigoro03,3,1
 【年明け】讃岐うどんちゃん,中国・四国,中国・四国,HR,飲食,ill_21823_toshiakesanukiudonchan03,3,1
 【振袖】とちおとめちゃん,関東,関東,HR,飲食,ill_21813_furisodetochiotomechan03,3,1
+雪のサンタマリア,九州・沖縄,九州・沖縄,HR,,ill_21741_yukinosantamaria01,3,1
+人形山,中部,中部,HR,,ill_21721_ningyozan01,3,1
+鍋焼きうどんちゃん,中国・四国,中国・四国,HR,,ill_21671_nabeyakiudonchan01,3,1
+ほうとうちゃん,中部,中部,HR,,ill_21661_hotochan01,3,1
+喜多方ラーメンちゃん,北海道・東北,北海道・東北,HR,,ill_21651_kitakataramenchan01,3,1
 おみくじちゃん,中国・四国,中国・四国,HR,名物,ill_21393_omikujichan03,3,1
 【賀正】伊勢海老ちゃん,近畿,近畿,HR,飲食,ill_21383_shogatsuisebi03,3,1
 招き猫ちゃん,中部,中部,HR,名物,ill_21373_manekinekochan03,3,1
@@ -519,6 +532,7 @@
 片車輪,近畿,滋賀,HR,妖怪,ill_11441_katawaguruma01,3,1
 貝児,無所属,無所属,HR,妖怪,ill_11431_kaichigo01,3,1
 送り狼,無所属,無所属,HR,妖怪,ill_11401_okuriokami01,3,1
+イワイセポ,関東,関東,HR,,ill_11361_iwaisepo01,3,1
 岸和田だんじり祭り,近畿,近畿,HR,名物,ill_10821_kishiwadadanjirimatsuri01,3,1
 吉田の火祭り,中部,中部,HR,名物,ill_10661_yoshidanohimatsuri01,3,1
 郡山うねめまつり,北海道・東北,北海道・東北,HR,名物,ill_10481_koriyamaunemematsuri01,3,1
