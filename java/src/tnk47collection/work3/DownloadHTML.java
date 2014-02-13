@@ -19,11 +19,11 @@ public class DownloadHTML extends HtmlWorker {
     private final Pattern cardPattern = Pattern.compile("<option value=\"(.*?)\"data-image-path=\"/illustrations/card/(ill_\\d+_.*?0\\d).jpg\\?[\\d]{8}-.*?\"data-rarity-code=\"([a-z]+)\"data-region-code=\"[a-z]+\"data-region-name=\"(.*?)\"data-pref-name=\"(.*?)\"data-max-attack=\"\\d+\"data-max-defence=\"\\d+\"data-max-cost=\"\\d+\"data-min-cost=\"\\d+\"data-card-type=\"(.*?)\"data-skill-name=\".*?\"data-skill-description=\".*?\"data-effect-class=\".*?\">.*?</option>");
 
     public static void main(final String[] args) {
-        final DownloadHTML worker = new DownloadHTML(890, 950);
+        final DownloadHTML worker = new DownloadHTML(950, 1000);
         worker.run();
     }
 
-    public DownloadHTML(int i, int j) {
+    public DownloadHTML(final int i, final int j) {
         super(i, j);
     }
 
@@ -40,7 +40,7 @@ public class DownloadHTML extends HtmlWorker {
 
         for (int i = this.start; i <= this.end; i++) {
             final List<String> list = new ArrayList<String>();
-            String url = String.format("/information?informationId=%d", i);
+            final String url = String.format("/information?informationId=%d", i);
             this.log.debug(url);
             final String html = this.httpGet(url);
             if (StringUtils.contains(html, "ページが表示できませんでした。ごめんなさい。")) {

@@ -15,11 +15,12 @@ public class DownloadHTML extends HtmlWorker {
 
     public static void main(final String[] args) {
         // 2013/12/18 last:8720
-        final DownloadHTML worker = new DownloadHTML(10701, 10900);
+        // 2014/02/14 last:12620
+        final DownloadHTML worker = new DownloadHTML(12620, 13000);
         worker.run();
     }
 
-    public DownloadHTML(int i, int j) {
+    public DownloadHTML(final int i, final int j) {
         super(i, j);
     }
 
