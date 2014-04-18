@@ -15,8 +15,8 @@ public class DownloadHTML extends HtmlWorker {
 
     public static void main(final String[] args) {
         // 2013/12/18 last:8720
-        // 2014/02/14 last:12620
-        final DownloadHTML worker = new DownloadHTML(12620, 13000);
+        // 2014/04/18 last:20614
+        final DownloadHTML worker = new DownloadHTML(20615, 22000);
         worker.run();
     }
 
@@ -34,7 +34,7 @@ public class DownloadHTML extends HtmlWorker {
             }
         }
         this.httpGet("/mypage");
-        for (int i = this.start; i <= this.end; i += 1) {
+        for (int i = this.start; i <= this.end; i += 10) {
             final String html = this.httpGet(String.format("/gacha/gacha-detail?gachaId=%d",
                                                            i));
             final String output = String.format("data2/step1/%d.html", i);

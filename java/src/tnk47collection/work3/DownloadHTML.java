@@ -19,7 +19,8 @@ public class DownloadHTML extends HtmlWorker {
     private final Pattern cardPattern = Pattern.compile("<option value=\"(.*?)\"data-image-path=\"/illustrations/card/(ill_\\d+_.*?0\\d).jpg\\?[\\d]{8}-.*?\"data-rarity-code=\"([a-z]+)\"data-region-code=\"[a-z]+\"data-region-name=\"(.*?)\"data-pref-name=\"(.*?)\"data-max-attack=\"\\d+\"data-max-defence=\"\\d+\"data-max-cost=\"\\d+\"data-min-cost=\"\\d+\"data-card-type=\"(.*?)\"data-skill-name=\".*?\"data-skill-description=\".*?\"data-effect-class=\".*?\">.*?</option>");
 
     public static void main(final String[] args) {
-        final DownloadHTML worker = new DownloadHTML(950, 1000);
+        // 2014/04/17 1001~1288
+        final DownloadHTML worker = new DownloadHTML(1289, 1500);
         worker.run();
     }
 
@@ -94,7 +95,7 @@ public class DownloadHTML extends HtmlWorker {
             }
         }
 
-        this.httpClient.saveCookie(this.cookie);
+        // this.httpClient.saveCookie(this.cookie);
     }
 
 }

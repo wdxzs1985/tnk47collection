@@ -25,7 +25,7 @@ public class MakeRawText implements Runnable {
     private final int number;
 
     public static void main(final String[] args) {
-        for (int i = 1; i <= 12620; i++) {
+        for (int i = 1; i <= 20614; i++) {
             MakeRawText.executor.execute(new MakeRawText(i));
         }
         MakeRawText.executor.shutdown();

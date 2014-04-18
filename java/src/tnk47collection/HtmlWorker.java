@@ -23,7 +23,7 @@ public abstract class HtmlWorker implements Runnable {
     protected final int end;
 
     public HtmlWorker(final int start, final int end) {
-        this.httpClient.loadCookie(this.cookie);
+        // this.httpClient.loadCookie(this.cookie);
         this.start = start;
         this.end = end;
     }
