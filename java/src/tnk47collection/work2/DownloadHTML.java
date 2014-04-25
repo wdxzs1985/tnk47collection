@@ -14,9 +14,8 @@ import common.SystemConstants;
 public class DownloadHTML extends HtmlWorker {
 
     public static void main(final String[] args) {
-        // 2013/12/18 last:8720
-        // 2014/04/18 last:20614
-        final DownloadHTML worker = new DownloadHTML(20615, 22000);
+        final DownloadHTML worker = new DownloadHTML(Work2Constants.LAST_ID,
+                                                     Work2Constants.NEXT_ID);
         worker.run();
     }
 

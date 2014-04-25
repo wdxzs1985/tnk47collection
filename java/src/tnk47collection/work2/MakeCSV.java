@@ -20,7 +20,7 @@ public class MakeCSV implements Runnable {
     private final int number;
 
     public static void main(final String[] args) {
-        for (int i = 1; i <= 20614; i++) {
+        for (int i = 1; i <= Work2Constants.LAST_ID; i++) {
             MakeCSV.executor.execute(new MakeCSV(i));
         }
         MakeCSV.executor.shutdown();
