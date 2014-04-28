@@ -33,13 +33,17 @@ public class DownloadHTML extends HtmlWorker {
             }
         }
         this.httpGet("/mypage");
-        for (int i = this.start; i <= this.end; i += 10) {
+        int i = this.start;
+        while (i < this.end) {
+            // for (int i = this.start; i <= this.end; i += 10) {
             final String html = this.httpGet(String.format("/gacha/gacha-detail?gachaId=%d",
                                                            i));
             final String output = String.format("data2/step1/%d.html", i);
             if (StringUtils.contains(html, "ページが表示できませんでした。ごめんなさい。")) {
                 this.log.warn("ページが表示できませんでした。");
+                i += 10;
             } else {
+                i++;
                 try {
                     final File file = new File(output);
                     FileUtils.write(file, html, SystemConstants.ENCODING);
