@@ -6,7 +6,8 @@ public interface Work2Constants {
     // 2014/04/18 last:20614
     // 2014/04/25 last:20835
     // 2014/04/28 last:20895
-    int LAST_ID = 20895;
+    // 2014/05/16 last:21580
+    int LAST_ID = 21581;
 
     int NEXT_ID = 22000;
 }
